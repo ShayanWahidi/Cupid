@@ -37,7 +37,7 @@ export function useAuth() {
     const { data } = await supabase
       .from('profiles')
       .select('id')
-      .eq('id', userId)
+      .eq('user_id', userId)
       .maybeSingle()
     return !!data
   }
