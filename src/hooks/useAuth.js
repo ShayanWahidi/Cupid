@@ -13,7 +13,8 @@ export function useAuth() {
       setLoading(false)
     })
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      console.log('Auth state changed:', event, session?.user?.id)
       setSession(session)
       setUser(session?.user ?? null)
     })
@@ -34,12 +35,14 @@ export function useAuth() {
     supabase.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: window.location.origin } })
 
   const checkProfileExists = async (userId) => {
-    const { data } = await supabase
+    console.log('Checking profile for userId:', userId)
+    const { data, error } = await supabase
       .from('profiles')
-      .select('id')
+      .select('user_id')
       .eq('user_id', userId)
-      .maybeSingle()
-    return !!data
+      .single()
+    console.log('Profile check result:', data, error)
+    return !!data && !error
   }
 
   return { user, session, loading, signUp, signIn, signOut, signInWithGoogle, checkProfileExists }
