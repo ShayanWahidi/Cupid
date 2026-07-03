@@ -107,7 +107,7 @@ export default function Setup() {
         photoUrls.push(urlData.publicUrl)
       }
 
-      const { error: insertError } = await supabase.from('profiles').insert({
+      const { error: insertError } = await supabase.from('profiles').upsert({
         user_id: user.id,
         name: form.name.trim(),
         age: Number(form.age),
