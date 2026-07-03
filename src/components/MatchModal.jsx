@@ -1,5 +1,7 @@
 import { useNavigate } from 'react-router-dom'
+import { motion } from 'motion/react'
 import { useMatchContext } from '../context/MatchContext'
+import BlurText from './BlurText'
 
 export default function MatchModal() {
   const { showMatch, matchedUser, dismissMatch } = useMatchContext()
@@ -8,10 +10,15 @@ export default function MatchModal() {
   if (!showMatch || !matchedUser) return null
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center px-6">
-      <div className="bg-white rounded-3xl w-full max-w-sm px-8 py-10 text-center">
-        <h2 className="text-3xl font-bold text-red-500 mb-1">It&apos;s a Match!</h2>
-        <p className="text-gray-500 mb-6">
+    <div className="fixed inset-0 z-50 bg-[#000926]/95 backdrop-blur-md flex items-center justify-center px-6">
+      <motion.div
+        initial={{ scale: 0.8, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ duration: 0.3 }}
+        className="w-full max-w-sm px-8 py-10 text-center"
+      >
+        <BlurText text="It's a Match! 💙" className="font-['Pacifico'] text-4xl text-[#D6E6F3] justify-center" delay={150} />
+        <p className="text-[#A6C5D7] mb-6 mt-2">
           You and {matchedUser.name} liked each other
         </p>
 
@@ -19,28 +26,32 @@ export default function MatchModal() {
           <img
             src={matchedUser.photos[0]}
             alt=""
-            className="w-24 h-24 rounded-full object-cover mx-auto mb-6 border-4 border-red-200"
+            className="w-24 h-24 rounded-full object-cover mx-auto mb-6 ring-4 ring-[#A6C5D7]"
           />
         )}
 
         <div className="flex flex-col gap-3">
-          <button
+          <motion.button
             onClick={dismissMatch}
-            className="w-full bg-black text-white rounded-xl py-3.5 font-medium active:opacity-90 transition"
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            className="w-full bg-gradient-to-r from-[#0F52BA] to-[#A6C5D7] text-white rounded-2xl py-3.5 font-medium transition"
           >
             Keep Swiping
-          </button>
-          <button
+          </motion.button>
+          <motion.button
             onClick={() => {
               dismissMatch()
               navigate('/matches')
             }}
-            className="w-full border border-gray-300 rounded-xl py-3.5 font-medium active:bg-gray-50 transition"
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            className="w-full border border-[#A6C5D7]/30 text-[#A6C5D7] rounded-2xl py-3.5 font-medium active:bg-white/5 transition"
           >
             Send Message
-          </button>
+          </motion.button>
         </div>
-      </div>
+      </motion.div>
     </div>
   )
 }

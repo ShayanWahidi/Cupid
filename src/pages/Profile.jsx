@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { motion } from 'motion/react'
 import { supabase } from '../lib/supabase'
 import { useAuth } from '../hooks/useAuth'
 import Header from '../components/Header'
@@ -13,8 +14,8 @@ const MAX_PHOTOS = 4
 function PillSelector({ options, value, onChange, label }) {
   return (
     <div>
-      <p className="text-sm font-medium mb-2">{label}</p>
-      <div className="flex gap-2">
+      <p className="text-sm font-medium mb-2 text-[#A6C5D7]">{label}</p>
+      <div className="flex gap-2 flex-wrap">
         {options.map((opt) => (
           <button
             type="button"
@@ -22,8 +23,8 @@ function PillSelector({ options, value, onChange, label }) {
             onClick={() => onChange(opt)}
             className={`px-5 py-2 rounded-full text-sm font-medium border transition ${
               value === opt
-                ? 'bg-black text-white border-black'
-                : 'bg-white text-gray-600 border-gray-300'
+                ? 'bg-[#0F52BA] border-[#A6C5D7] text-white'
+                : 'bg-transparent border-[#A6C5D7]/30 text-[#A6C5D7]'
             }`}
           >
             {opt}
@@ -195,15 +196,15 @@ export default function Profile() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-dvh">
-        <div className="w-6 h-6 border-2 border-gray-300 border-t-black rounded-full animate-spin" />
+      <div className="flex items-center justify-center min-h-dvh bg-[#000926]">
+        <div className="w-6 h-6 border-2 border-[#A6C5D7]/30 border-t-[#A6C5D7] rounded-full animate-spin" />
       </div>
     )
   }
 
   if (!editing) {
     return (
-      <div className="flex flex-col min-h-dvh pb-16">
+      <div className="flex flex-col min-h-dvh pb-16 bg-[#000926]">
         <Header />
 
         <div className="flex-1 overflow-y-auto">
@@ -222,34 +223,39 @@ export default function Profile() {
 
           <div className="px-6 pt-4 pb-6 space-y-1">
             <div className="flex items-center gap-2">
-              <h2 className="text-xl font-bold">
+              <h2 className="text-xl font-['Pacifico'] text-[#F0F4FF]">
                 {profile?.name}, {profile?.age}
               </h2>
               <button
                 onClick={startEdit}
-                className="w-7 h-7 flex items-center justify-center rounded-full active:bg-gray-100 transition shrink-0"
+                className="w-7 h-7 flex items-center justify-center rounded-full shrink-0"
               >
-                <svg className="w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <svg className="w-4 h-4 text-[#A6C5D7]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
                 </svg>
               </button>
             </div>
-            <p className="text-gray-500 text-sm">
-              {profile?.branch} &middot; {profile?.year}
-            </p>
-            <p className="text-gray-400 text-sm capitalize">
-              {profile?.gender?.toLowerCase()} &middot; Interested in {profile?.preference?.toLowerCase()}
-            </p>
+            <div className="bg-white/5 rounded-2xl border border-white/10 p-4 space-y-1">
+              <p className="text-[#A6C5D7] text-sm">Branch & Year</p>
+              <p className="text-[#F0F4FF]">{profile?.branch} &middot; {profile?.year}</p>
+            </div>
+            <div className="bg-white/5 rounded-2xl border border-white/10 p-4 space-y-1">
+              <p className="text-[#A6C5D7] text-sm">Interests</p>
+              <p className="text-[#F0F4FF] capitalize">{profile?.gender?.toLowerCase()} &middot; Interested in {profile?.preference?.toLowerCase()}</p>
+            </div>
             {profile?.bio && (
-              <p className="text-gray-600 text-sm mt-3 leading-relaxed">{profile.bio}</p>
+              <div className="bg-white/5 rounded-2xl border border-white/10 p-4 space-y-1">
+                <p className="text-[#A6C5D7] text-sm">Bio</p>
+                <p className="text-[#F0F4FF] leading-relaxed">{profile.bio}</p>
+              </div>
             )}
           </div>
         </div>
 
-        <div className="px-6 py-4 border-t border-gray-100">
+        <div className="px-6 py-4 border-t border-white/10">
           <button
             onClick={handleLogout}
-            className="w-full text-center text-sm text-gray-400 active:text-gray-600 transition py-2"
+            className="w-full text-center text-sm text-[#A6C5D7]/60 active:text-[#A6C5D7] transition py-2"
           >
             Sign out
           </button>
@@ -259,12 +265,12 @@ export default function Profile() {
   }
 
   return (
-    <div className="flex flex-col min-h-dvh pb-16">
+    <div className="flex flex-col min-h-dvh pb-16 bg-gradient-to-b from-[#000926] to-[#0F52BA]">
       <div className="flex items-center justify-between px-6 pt-6 pb-2">
-        <h1 className="text-2xl font-bold">Edit profile</h1>
+        <h1 className="text-2xl font-['Pacifico'] text-[#D6E6F3]">Edit profile</h1>
         <button
           onClick={cancelEdit}
-          className="text-sm text-gray-500 active:text-gray-700 transition font-medium"
+          className="text-sm text-[#A6C5D7] active:text-[#D6E6F3] transition font-medium"
         >
           Cancel
         </button>
@@ -272,7 +278,7 @@ export default function Profile() {
 
       <div className="flex-1 overflow-y-auto px-6 pb-6 space-y-5">
         <div>
-          <p className="text-sm font-medium mb-2">Photos ({photoCount}/{MAX_PHOTOS})</p>
+          <p className="text-sm font-medium mb-2 text-[#A6C5D7]">Photos ({photoCount}/{MAX_PHOTOS})</p>
           <div className="grid grid-cols-4 gap-2">
             {Array.from({ length: MAX_PHOTOS }).map((_, i) => {
               const existing = existingPhotos[i]
@@ -282,8 +288,8 @@ export default function Profile() {
               return (
                 <div
                   key={i}
-                  className={`aspect-square rounded-xl border-2 border-dashed flex items-center justify-center overflow-hidden ${
-                    photo ? 'border-transparent' : 'border-gray-300'
+                  className={`aspect-square rounded-2xl border-2 border-dashed flex items-center justify-center overflow-hidden bg-white/5 ${
+                    photo ? 'border-transparent' : 'border-[#A6C5D7]/40'
                   }`}
                 >
                   {existing ? (
@@ -312,7 +318,7 @@ export default function Profile() {
                     <button
                       type="button"
                       onClick={() => fileInputRef.current?.click()}
-                      className="text-gray-400 text-xl leading-none"
+                      className="text-[#A6C5D7]/60 text-xl leading-none"
                     >
                       +
                     </button>
@@ -332,51 +338,51 @@ export default function Profile() {
         </div>
 
         <div>
-          <label className="text-sm font-medium mb-1.5 block">Full name</label>
+          <label className="text-sm font-medium mb-1.5 block text-[#A6C5D7]">Full name</label>
           <input
             type="text"
             value={form.name}
             onChange={(e) => update('name', e.target.value)}
-            className="w-full border border-gray-300 rounded-xl px-4 py-3 outline-none focus:border-black transition text-base"
+            className="w-full bg-white/10 border border-[#A6C5D7]/30 rounded-xl px-4 py-3 outline-none focus:border-[#A6C5D7] transition text-base text-[#F0F4FF] placeholder-[#A6C5D7]/50"
           />
         </div>
 
         <div>
-          <label className="text-sm font-medium mb-1.5 block">Age</label>
+          <label className="text-sm font-medium mb-1.5 block text-[#A6C5D7]">Age</label>
           <input
             type="number"
             min={18}
             max={30}
             value={form.age}
             onChange={(e) => update('age', e.target.value)}
-            className="w-full border border-gray-300 rounded-xl px-4 py-3 outline-none focus:border-black transition text-base"
+            className="w-full bg-white/10 border border-[#A6C5D7]/30 rounded-xl px-4 py-3 outline-none focus:border-[#A6C5D7] transition text-base text-[#F0F4FF] placeholder-[#A6C5D7]/50"
           />
         </div>
 
         <div>
-          <label className="text-sm font-medium mb-1.5 block">Branch</label>
+          <label className="text-sm font-medium mb-1.5 block text-[#A6C5D7]">Branch</label>
           <select
             value={form.branch}
             onChange={(e) => update('branch', e.target.value)}
-            className="w-full border border-gray-300 rounded-xl px-4 py-3 outline-none focus:border-black transition text-base appearance-none bg-white"
+            className="w-full bg-white/10 border border-[#A6C5D7]/30 rounded-xl px-4 py-3 outline-none focus:border-[#A6C5D7] transition text-base appearance-none text-[#F0F4FF]"
           >
-            <option value="">Select branch</option>
+            <option value="" className="bg-[#000926]">Select branch</option>
             {BRANCHES.map((b) => (
-              <option key={b} value={b}>{b}</option>
+              <option key={b} value={b} className="bg-[#000926]">{b}</option>
             ))}
           </select>
         </div>
 
         <div>
-          <label className="text-sm font-medium mb-1.5 block">Year</label>
+          <label className="text-sm font-medium mb-1.5 block text-[#A6C5D7]">Year</label>
           <select
             value={form.year}
             onChange={(e) => update('year', e.target.value)}
-            className="w-full border border-gray-300 rounded-xl px-4 py-3 outline-none focus:border-black transition text-base appearance-none bg-white"
+            className="w-full bg-white/10 border border-[#A6C5D7]/30 rounded-xl px-4 py-3 outline-none focus:border-[#A6C5D7] transition text-base appearance-none text-[#F0F4FF]"
           >
-            <option value="">Select year</option>
+            <option value="" className="bg-[#000926]">Select year</option>
             {YEARS.map((y) => (
-              <option key={y} value={y}>{y}</option>
+              <option key={y} value={y} className="bg-[#000926]">{y}</option>
             ))}
           </select>
         </div>
@@ -385,27 +391,29 @@ export default function Profile() {
         <PillSelector label="Interested in" options={PREFERENCES} value={form.preference} onChange={(v) => update('preference', v)} />
 
         <div>
-          <label className="text-sm font-medium mb-1.5 block">Bio</label>
+          <label className="text-sm font-medium mb-1.5 block text-[#A6C5D7]">Bio</label>
           <textarea
             maxLength={150}
             value={form.bio}
             onChange={(e) => update('bio', e.target.value)}
             placeholder="Write something about yourself…"
             rows={4}
-            className="w-full border border-gray-300 rounded-xl px-4 py-3 outline-none focus:border-black transition text-base resize-none"
+            className="w-full bg-white/10 border border-[#A6C5D7]/30 rounded-xl px-4 py-3 outline-none focus:border-[#A6C5D7] transition text-base resize-none text-[#F0F4FF] placeholder-[#A6C5D7]/50"
           />
-          <p className="text-xs text-gray-400 text-right mt-1">{form.bio.length}/150</p>
+          <p className="text-xs text-[#A6C5D7]/60 text-right mt-1">{form.bio.length}/150</p>
         </div>
 
-        {error && <p className="text-sm text-red-500">{error}</p>}
+        {error && <p className="text-sm text-red-400">{error}</p>}
 
-        <button
+        <motion.button
           onClick={handleSave}
           disabled={saving}
-          className="w-full bg-black text-white rounded-xl py-3.5 font-medium active:opacity-90 transition disabled:opacity-50"
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+          className="w-full bg-gradient-to-r from-[#0F52BA] to-[#A6C5D7] text-white rounded-2xl py-3.5 font-medium disabled:opacity-50 transition"
         >
           {saving ? 'Saving…' : 'Save'}
-        </button>
+        </motion.button>
       </div>
     </div>
   )

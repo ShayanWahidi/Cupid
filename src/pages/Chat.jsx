@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
+import { motion } from 'motion/react'
 import { supabase } from '../lib/supabase'
 import { useAuth } from '../hooks/useAuth'
 import UserProfileModal from '../components/UserProfileModal'
@@ -149,20 +150,20 @@ export default function Chat() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-dvh">
-        <div className="w-6 h-6 border-2 border-gray-300 border-t-black rounded-full animate-spin" />
+      <div className="flex items-center justify-center min-h-dvh bg-[#000926]">
+        <div className="w-6 h-6 border-2 border-[#A6C5D7]/30 border-t-[#A6C5D7] rounded-full animate-spin" />
       </div>
     )
   }
 
   return (
-    <div className="flex flex-col h-dvh">
-      <div className="flex items-center gap-3 px-4 py-3 border-b border-gray-100 shrink-0">
+    <div className="flex flex-col h-dvh bg-[#000926]">
+      <div className="flex items-center gap-3 px-4 py-3 border-b border-white/10 shrink-0 bg-[#000926]/90 backdrop-blur-md">
         <button
           onClick={() => navigate('/matches')}
-          className="w-9 h-9 flex items-center justify-center rounded-full active:bg-gray-100 transition shrink-0"
+          className="w-9 h-9 flex items-center justify-center rounded-full shrink-0"
         >
-          <svg className="w-5 h-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+          <svg className="w-5 h-5 text-[#D6E6F3]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
           </svg>
         </button>
@@ -175,18 +176,18 @@ export default function Chat() {
             <img
               src={otherProfile.photos[0]}
               alt=""
-              className="w-9 h-9 rounded-full object-cover shrink-0"
+              className="w-9 h-9 rounded-full object-cover shrink-0 ring-2 ring-[#A6C5D7]"
             />
           ) : (
-            <div className="w-9 h-9 rounded-full bg-gray-200 shrink-0" />
+            <div className="w-9 h-9 rounded-full bg-white/10 shrink-0 ring-2 ring-[#A6C5D7]/30" />
           )}
 
           <div className="min-w-0 flex-1">
-            <p className="font-semibold text-gray-900 truncate text-sm">
+            <p className="font-semibold text-[#F0F4FF] truncate text-sm">
               {otherProfile?.name || 'Chat'}
             </p>
             {otherProfile && (
-              <p className="text-xs text-gray-400 truncate">
+              <p className="text-xs text-[#A6C5D7]/70 truncate">
                 {otherProfile.branch} &middot; {otherProfile.year}
               </p>
             )}
@@ -196,24 +197,24 @@ export default function Chat() {
         <div className="relative">
           <button
             onClick={() => setMenuOpen(!menuOpen)}
-            className="w-9 h-9 flex items-center justify-center rounded-full active:bg-gray-100 transition text-gray-500"
+            className="w-9 h-9 flex items-center justify-center rounded-full text-[#A6C5D7]"
           >
             &#8942;
           </button>
           {menuOpen && (
             <>
               <div className="fixed inset-0 z-10" onClick={() => setMenuOpen(false)} />
-              <div className="absolute top-10 right-0 z-20 bg-white rounded-xl shadow-xl border border-gray-100 w-44 overflow-hidden">
+              <div className="absolute top-10 right-0 z-20 bg-[#000926] rounded-xl shadow-xl border border-white/10 w-44 overflow-hidden">
                 <button
                   onClick={handleReport}
-                  className="w-full px-4 py-3 text-sm text-left text-gray-700 active:bg-gray-50 transition"
+                  className="w-full px-4 py-3 text-sm text-left text-[#A6C5D7] active:bg-white/5 transition"
                 >
                   Report {otherProfile?.name || 'user'}
                 </button>
-                <div className="h-px bg-gray-100" />
+                <div className="h-px bg-white/10" />
                 <button
                   onClick={handleBlock}
-                  className="w-full px-4 py-3 text-sm text-left text-red-500 active:bg-red-50 transition"
+                  className="w-full px-4 py-3 text-sm text-left text-red-400 active:bg-white/5 transition"
                 >
                   Block {otherProfile?.name || 'user'}
                 </button>
@@ -227,26 +228,29 @@ export default function Chat() {
         {messages.map((msg) => {
           const isMe = msg.sender_id === user.id
           return (
-            <div
+            <motion.div
               key={msg.id}
+              initial={{ opacity: 0, x: isMe ? 20 : -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.2 }}
               className={`flex ${isMe ? 'justify-end' : 'justify-start'}`}
             >
               <div
                 className={`max-w-[80%] rounded-2xl px-4 py-2.5 text-sm leading-relaxed ${
                   isMe
-                    ? 'bg-pink-500 text-white rounded-br-md'
-                    : 'bg-gray-100 text-gray-900 rounded-bl-md'
+                    ? 'bg-gradient-to-r from-[#0F52BA] to-[#A6C5D7] text-white rounded-br-sm'
+                    : 'bg-white/10 text-[#F0F4FF] rounded-bl-sm border border-white/10'
                 }`}
               >
                 {msg.content}
               </div>
-            </div>
+            </motion.div>
           )
         })}
         <div ref={bottomRef} />
       </div>
 
-      <div className="border-t border-gray-100 px-4 py-3 shrink-0">
+      <div className="border-t border-white/10 px-4 py-3 shrink-0">
         <div className="flex items-end gap-2">
           <textarea
             ref={inputRef}
@@ -255,22 +259,24 @@ export default function Chat() {
             onKeyDown={handleKeyDown}
             placeholder="Message…"
             rows={1}
-            className="flex-1 border border-gray-300 rounded-2xl px-4 py-2.5 outline-none focus:border-black transition text-sm resize-none max-h-32"
+            className="flex-1 bg-white/5 border border-white/10 rounded-2xl px-4 py-2.5 outline-none focus:border-[#A6C5D7]/50 transition text-sm resize-none max-h-32 text-[#F0F4FF] placeholder-[#A6C5D7]/50"
             style={{ height: 'auto', minHeight: 40 }}
             onInput={(e) => {
               e.target.style.height = 'auto'
               e.target.style.height = `${e.target.scrollHeight}px`
             }}
           />
-          <button
+          <motion.button
             onClick={handleSend}
             disabled={!input.trim() || sending}
-            className="w-10 h-10 rounded-full bg-black text-white flex items-center justify-center shrink-0 active:opacity-80 transition disabled:opacity-30"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="w-10 h-10 rounded-xl bg-[#0F52BA] text-white flex items-center justify-center shrink-0 disabled:opacity-30 transition"
           >
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M5 12h14M12 5l7 7-7 7" />
             </svg>
-          </button>
+          </motion.button>
         </div>
       </div>
 

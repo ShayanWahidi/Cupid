@@ -1,6 +1,7 @@
 import React from 'react'
 import { useState, useRef, useMemo, useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { motion } from 'motion/react'
 import TinderCard from 'react-tinder-card'
 import { supabase } from '../lib/supabase'
 import { useAuth } from '../hooks/useAuth'
@@ -174,19 +175,19 @@ export default function Swipe() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-dvh">
-        <div className="w-6 h-6 border-2 border-gray-300 border-t-black rounded-full animate-spin" />
+      <div className="flex items-center justify-center min-h-dvh bg-[#000926]">
+        <div className="w-6 h-6 border-2 border-[#A6C5D7]/30 border-t-[#A6C5D7] rounded-full animate-spin" />
       </div>
     )
   }
 
   if (error) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-dvh px-6 gap-3">
-        <p className="text-red-500 text-sm">{error}</p>
+      <div className="flex flex-col items-center justify-center min-h-dvh px-6 gap-3 bg-[#000926]">
+        <p className="text-red-400 text-sm">{error}</p>
         <button
           onClick={fetchProfiles}
-          className="bg-black text-white rounded-xl px-6 py-2.5 text-sm font-medium"
+          className="bg-gradient-to-r from-[#0F52BA] to-[#A6C5D7] text-white rounded-2xl px-6 py-2.5 text-sm font-medium"
         >
           Retry
         </button>
@@ -195,13 +196,13 @@ export default function Swipe() {
   }
 
   return (
-    <div className="flex flex-col h-dvh pb-16">
+    <div className="flex flex-col h-dvh pb-16 bg-[#000926]">
       <Header />
       {profiles.length === 0 ? (
         <div className="flex-1 flex flex-col items-center justify-center px-8 text-center">
           <span className="text-5xl mb-5">🔍</span>
-          <h2 className="text-xl font-semibold text-gray-900">No more profiles for now</h2>
-          <p className="text-gray-400 mt-2">Check back later when more students join!</p>
+          <h2 className="text-xl font-['Pacifico'] text-[#D6E6F3]">No more profiles for now</h2>
+          <p className="text-[#A6C5D7] mt-2">Check back later when more students join!</p>
         </div>
       ) : (
         <>
@@ -232,7 +233,7 @@ export default function Swipe() {
                       swipeThreshold={120}
                       className="absolute inset-0"
                     >
-                      <div className="w-full h-full rounded-2xl overflow-hidden bg-white shadow-lg relative">
+                      <div className="w-full h-full rounded-3xl overflow-hidden shadow-2xl relative">
                         {profile.photos?.[0] ? (
                           <img
                             src={profile.photos[0]}
@@ -240,20 +241,20 @@ export default function Swipe() {
                             className="w-full h-full object-cover"
                           />
                         ) : (
-                          <div className="w-full h-full bg-gray-200 flex items-center justify-center text-gray-400">
+                          <div className="w-full h-full bg-white/10 flex items-center justify-center text-[#A6C5D7]/50">
                             No photo
                           </div>
                         )}
 
-                        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent px-5 pt-14 pb-5">
-                          <h2 className="text-white text-xl font-bold">
+                        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-[#000926] to-transparent px-5 pt-14 pb-5">
+                          <h2 className="text-[#F0F4FF] text-xl font-['Pacifico']">
                             {profile.name}, {profile.age}
                           </h2>
-                          <p className="text-white/80 text-sm mt-0.5">
+                          <p className="text-[#D6E6F3]/80 text-sm mt-0.5">
                             {profile.branch} &middot; {profile.year}
                           </p>
                           {profile.bio && (
-                            <p className="text-white/70 text-sm mt-1.5 leading-snug line-clamp-3">
+                            <p className="text-[#D6E6F3]/60 text-sm mt-1.5 leading-snug line-clamp-3">
                               {profile.bio}
                             </p>
                           )}
@@ -265,7 +266,7 @@ export default function Swipe() {
                               onClick={() =>
                                 setMenuOpen(menuOpen === profile.user_id ? null : profile.user_id)
                               }
-                              className="w-8 h-8 rounded-full bg-black/30 flex items-center justify-center text-white text-lg leading-none"
+                              className="w-8 h-8 rounded-full bg-black/40 flex items-center justify-center text-white text-lg leading-none"
                             >
                               &#8942;
                             </button>
@@ -275,17 +276,17 @@ export default function Swipe() {
                                   className="fixed inset-0 z-10"
                                   onClick={() => setMenuOpen(null)}
                                 />
-                                <div className="absolute top-10 right-0 z-20 bg-white rounded-xl shadow-xl border border-gray-100 w-44 overflow-hidden">
+                                <div className="absolute top-10 right-0 z-20 bg-[#000926] rounded-xl shadow-xl border border-white/10 w-44 overflow-hidden">
                                   <button
                                     onClick={() => handleReport(profile)}
-                                    className="w-full px-4 py-3 text-sm text-left text-gray-700 active:bg-gray-50 transition"
+                                    className="w-full px-4 py-3 text-sm text-left text-[#A6C5D7] active:bg-white/5 transition"
                                   >
                                     Report {profile.name}
                                   </button>
-                                  <div className="h-px bg-gray-100" />
+                                  <div className="h-px bg-white/10" />
                                   <button
                                     onClick={() => handleBlock(profile)}
-                                    className="w-full px-4 py-3 text-sm text-left text-red-500 active:bg-red-50 transition"
+                                    className="w-full px-4 py-3 text-sm text-left text-red-400 active:bg-white/5 transition"
                                   >
                                     Block {profile.name}
                                   </button>
@@ -303,18 +304,22 @@ export default function Swipe() {
           </div>
 
           <div className="flex items-center justify-center gap-8 py-6 pb-8">
-            <button
+            <motion.button
               onClick={() => swipe('left')}
-              className="w-16 h-16 rounded-full border-2 border-gray-200 flex items-center justify-center text-3xl text-gray-500 active:bg-gray-50 transition shadow-sm"
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+              className="w-16 h-16 rounded-full border-2 border-[#A6C5D7]/40 flex items-center justify-center text-3xl text-[#A6C5D7] transition shadow-sm"
             >
               &#10005;
-            </button>
-            <button
+            </motion.button>
+            <motion.button
               onClick={() => swipe('right')}
-              className="w-16 h-16 rounded-full border-2 border-red-200 flex items-center justify-center text-3xl text-red-400 active:bg-red-50 transition shadow-sm"
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+              className="w-16 h-16 rounded-full bg-gradient-to-r from-[#0F52BA] to-[#A6C5D7] flex items-center justify-center text-3xl text-white shadow-sm"
             >
               &#9829;
-            </button>
+            </motion.button>
           </div>
         </>
       )}

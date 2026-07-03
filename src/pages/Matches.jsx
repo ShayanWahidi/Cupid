@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { motion } from 'motion/react'
 import { supabase } from '../lib/supabase'
 import { useAuth } from '../hooks/useAuth'
 import Header from '../components/Header'
@@ -59,51 +60,55 @@ export default function Matches() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-dvh">
-        <div className="w-6 h-6 border-2 border-gray-300 border-t-black rounded-full animate-spin" />
+      <div className="flex items-center justify-center min-h-dvh bg-[#000926]">
+        <div className="w-6 h-6 border-2 border-[#A6C5D7]/30 border-t-[#A6C5D7] rounded-full animate-spin" />
       </div>
     )
   }
 
   return (
-    <div className="flex flex-col h-dvh pb-16">
+    <div className="flex flex-col h-dvh pb-16 bg-[#000926]">
       <Header />
 
       {matches.length === 0 ? (
         <div className="flex-1 flex flex-col items-center justify-center px-8 text-center">
           <p className="text-4xl mb-4">💫</p>
-          <p className="text-gray-500 text-lg">No matches yet.</p>
-          <p className="text-gray-400 text-sm mt-1">Keep swiping!</p>
+          <p className="text-[#A6C5D7] text-lg font-['Pacifico']">No matches yet.</p>
+          <p className="text-[#A6C5D7]/60 text-sm mt-1">Keep swiping!</p>
         </div>
       ) : (
         <div className="flex-1 overflow-y-auto px-6 pb-4">
           <div className="flex flex-col gap-3">
-            {matches.map(({ matchId, profile }) => (
-              <button
+            {matches.map(({ matchId, profile }, index) => (
+              <motion.button
                 key={matchId}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3, delay: index * 0.05 }}
+                whileHover={{ backgroundColor: 'rgba(255,255,255,0.1)' }}
                 onClick={() => navigate(`/chat/${matchId}`)}
-                className="flex items-center gap-4 p-3 rounded-2xl active:bg-gray-50 transition text-left"
+                className="flex items-center gap-4 p-3 rounded-2xl bg-white/5 border border-white/10 transition text-left"
               >
                 {profile?.photos?.[0] ? (
                   <img
                     src={profile.photos[0]}
                     alt=""
-                    className="w-14 h-14 rounded-full object-cover shrink-0"
+                    className="w-14 h-14 rounded-full object-cover shrink-0 ring-2 ring-[#A6C5D7]"
                   />
                 ) : (
-                  <div className="w-14 h-14 rounded-full bg-gray-200 shrink-0" />
+                  <div className="w-14 h-14 rounded-full bg-white/10 shrink-0 ring-2 ring-[#A6C5D7]/30" />
                 )}
                 <div className="min-w-0">
-                  <p className="font-semibold text-gray-900 truncate">
+                  <p className="font-semibold text-[#F0F4FF] truncate">
                     {profile?.name || 'Unknown'}
                   </p>
                   {profile && (
-                    <p className="text-sm text-gray-400 truncate">
+                    <p className="text-sm text-[#A6C5D7]/70 truncate">
                       {profile.branch} &middot; {profile.year}
                     </p>
                   )}
                 </div>
-              </button>
+              </motion.button>
             ))}
           </div>
         </div>

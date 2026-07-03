@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react'
+import { motion } from 'motion/react'
 import { supabase } from '../lib/supabase'
 import { useAuth } from '../hooks/useAuth'
 import UserProfileModal from './UserProfileModal'
@@ -81,13 +82,13 @@ export default function Header() {
 
   return (
     <>
-      <div className="flex items-center justify-between h-14 px-6 shrink-0">
-        <h1 className="text-xl font-bold tracking-tight">JSSpark</h1>
+      <div className="flex items-center justify-between h-14 px-6 shrink-0 bg-[#000926]/80 backdrop-blur-md">
+        <h1 className="text-xl font-['Pacifico'] text-[#D6E6F3]">JSSpark</h1>
 
         <div className="relative">
           <button
             onClick={() => setShowPanel((prev) => !prev)}
-            className="w-9 h-9 rounded-full flex items-center justify-center text-lg leading-none active:bg-gray-100 transition"
+            className="w-9 h-9 rounded-full flex items-center justify-center text-lg leading-none transition text-[#A6C5D7]"
           >
             🔔
             {unreadCount > 0 && (
@@ -100,12 +101,17 @@ export default function Header() {
           {showPanel && (
             <>
               <div className="fixed inset-0 z-40" onClick={() => setShowPanel(false)} />
-              <div className="absolute top-10 right-0 z-50 w-80 max-w-[calc(100vw-32px)] bg-white rounded-2xl shadow-xl border border-gray-100 max-h-[70dvh] overflow-y-auto">
-                <div className="px-4 py-3 border-b border-gray-100">
-                  <p className="text-sm font-semibold text-gray-900">Notifications</p>
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.2 }}
+                className="absolute top-10 right-0 z-50 w-80 max-w-[calc(100vw-32px)] bg-[#000926]/95 backdrop-blur-xl rounded-2xl border border-white/10 max-h-[70dvh] overflow-y-auto"
+              >
+                <div className="px-4 py-3 border-b border-white/10">
+                  <p className="text-sm font-semibold text-[#F0F4FF]">Notifications</p>
                 </div>
                 {notifications.length === 0 ? (
-                  <div className="px-4 py-10 text-center text-sm text-gray-400">
+                  <div className="px-4 py-10 text-center text-sm text-[#A6C5D7]/60">
                     No notifications yet
                   </div>
                 ) : (
@@ -119,7 +125,7 @@ export default function Header() {
                     ))}
                   </div>
                 )}
-              </div>
+              </motion.div>
             </>
           )}
         </div>
@@ -148,22 +154,22 @@ function NotificationItem({ notif, onClick }) {
   return (
     <button
       onClick={onClick}
-      className={`w-full flex items-center gap-3 px-4 py-3 text-left active:bg-gray-50 transition ${
-        !notif.read ? 'bg-pink-50' : ''
-      }`}
+      className={`w-full flex items-center gap-3 px-4 py-3 text-left transition ${
+        !notif.read ? 'bg-[#0F52BA]/20 border-l-2 border-[#A6C5D7]' : 'bg-white/5'
+      } rounded-xl mx-2 my-1`}
     >
       {profile?.photos?.[0] ? (
-        <img src={profile.photos[0]} alt="" className="w-10 h-10 rounded-full object-cover shrink-0" />
+        <img src={profile.photos[0]} alt="" className="w-10 h-10 rounded-full object-cover shrink-0 ring-2 ring-[#A6C5D7]" />
       ) : (
-        <div className="w-10 h-10 rounded-full bg-gray-200 shrink-0" />
+        <div className="w-10 h-10 rounded-full bg-white/10 shrink-0 ring-2 ring-[#A6C5D7]/30" />
       )}
       <div className="min-w-0 flex-1">
-        <p className="text-sm text-gray-800 leading-snug">
+        <p className="text-sm text-[#F0F4FF] leading-snug">
           {notif.type === 'match'
             ? `You matched with ${profile?.name || 'someone'}! 💜`
             : notif.type}
         </p>
-        <p className="text-xs text-gray-400 mt-0.5">
+        <p className="text-xs text-[#A6C5D7]/60 mt-0.5">
           {timeAgo(notif.created_at)}
         </p>
       </div>

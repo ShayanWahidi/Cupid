@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { motion } from 'motion/react'
 import { useAuth } from '../hooks/useAuth'
+import BlurText from '../components/BlurText'
 
 export default function Signup() {
   const { user, loading, signUp, checkProfileExists } = useAuth()
@@ -20,8 +22,8 @@ export default function Signup() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-dvh">
-        <div className="w-6 h-6 border-2 border-gray-300 border-t-black rounded-full animate-spin" />
+      <div className="flex items-center justify-center min-h-dvh bg-[#000926]">
+        <div className="w-6 h-6 border-2 border-[#A6C5D7]/30 border-t-[#A6C5D7] rounded-full animate-spin" />
       </div>
     )
   }
@@ -52,61 +54,68 @@ export default function Signup() {
   }
 
   return (
-    <div className="flex flex-col min-h-dvh px-6">
-      <button
+    <div className="flex flex-col min-h-dvh bg-gradient-to-b from-[#000926] to-[#0F52BA] px-6">
+      <motion.button
         onClick={() => navigate('/')}
-        className="w-9 h-9 flex items-center justify-center rounded-full active:bg-gray-100 transition mt-3 -ml-1 shrink-0"
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
+        className="w-9 h-9 flex items-center justify-center rounded-full mt-3 -ml-1 shrink-0"
       >
-        <svg className="w-5 h-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <svg className="w-5 h-5 text-[#D6E6F3]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
           <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
         </svg>
-      </button>
-      <div className="flex-1 flex flex-col justify-center">
-        <h1 className="text-2xl font-bold mb-1">Create account</h1>
-        <p className="text-gray-400 mb-8">Sign up to get started</p>
-
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-          <div>
-            <label className="text-sm font-medium mb-1.5 block">Email</label>
-            <input
-              type="email"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="you@example.com"
-              className="w-full border border-gray-300 rounded-xl px-4 py-3 outline-none focus:border-black transition text-base"
-            />
-          </div>
-          <div>
-            <label className="text-sm font-medium mb-1.5 block">Password</label>
-            <input
-              type="password"
-              required
-              minLength={6}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="At least 6 characters"
-              className="w-full border border-gray-300 rounded-xl px-4 py-3 outline-none focus:border-black transition text-base"
-            />
-          </div>
-
-          {error && (
-            <p className="text-sm text-red-500">{error}</p>
-          )}
-
-          <button
-            type="submit"
-            disabled={submitting}
-            className="w-full bg-black text-white rounded-xl py-3.5 font-medium active:opacity-90 transition disabled:opacity-50"
-          >
-            {submitting ? 'Creating account…' : 'Sign up'}
-          </button>
-        </form>
-      </div>
-
-      <p className="text-center text-sm text-gray-400 pb-8">
+      </motion.button>
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="flex-1 flex flex-col justify-center"
+      >
+        <div className="bg-white/5 backdrop-blur-md rounded-3xl border border-white/10 p-6">
+          <BlurText text="Create account" className="font-['Pacifico'] text-2xl text-[#D6E6F3] justify-center" delay={150} />
+          <p className="text-[#A6C5D7] text-center mb-6 mt-1">Sign up to get started</p>
+          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+            <div>
+              <label className="text-sm font-medium mb-1.5 block text-[#A6C5D7]">Email</label>
+              <input
+                type="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="you@example.com"
+                className="w-full bg-white/10 border border-[#A6C5D7]/30 rounded-xl px-4 py-3 outline-none focus:border-[#A6C5D7] transition text-base text-[#F0F4FF] placeholder-[#A6C5D7]/50"
+              />
+            </div>
+            <div>
+              <label className="text-sm font-medium mb-1.5 block text-[#A6C5D7]">Password</label>
+              <input
+                type="password"
+                required
+                minLength={6}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="At least 6 characters"
+                className="w-full bg-white/10 border border-[#A6C5D7]/30 rounded-xl px-4 py-3 outline-none focus:border-[#A6C5D7] transition text-base text-[#F0F4FF] placeholder-[#A6C5D7]/50"
+              />
+            </div>
+            {error && (
+              <p className="text-sm text-red-400">{error}</p>
+            )}
+            <motion.button
+              type="submit"
+              disabled={submitting}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              className="w-full bg-gradient-to-r from-[#0F52BA] to-[#A6C5D7] text-white rounded-2xl py-3.5 font-medium disabled:opacity-50 transition"
+            >
+              {submitting ? 'Creating account…' : 'Sign up'}
+            </motion.button>
+          </form>
+        </div>
+      </motion.div>
+      <p className="text-center text-sm text-[#A6C5D7]/60 pb-8">
         Already have an account?{' '}
-        <Link to="/login" className="font-medium text-black underline">
+        <Link to="/login" className="font-medium text-[#D6E6F3] underline">
           Log in
         </Link>
       </p>
