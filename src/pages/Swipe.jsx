@@ -112,11 +112,34 @@ export default function Swipe() {
     if (dir === 'like') {
       const isMutual = await checkMutualLike(profile.user_id)
       if (isMutual) {
-        await supabase.from('matches').insert({
+        const { data: newMatch } = await supabase.from('matches').insert({
           user1_id: user.id,
           user2_id: profile.user_id,
-        })
+        }).select().single()
+
         triggerMatch(profile)
+
+        if (newMatch) {
+          try {
+            await supabase.from('notifications').insert({
+              user_id: user.id,
+              type: 'match',
+              match_id: newMatch.id,
+              from_user_id: profile.user_id,
+              read: false,
+            })
+          } catch (_) {}
+
+          try {
+            await supabase.from('notifications').insert({
+              user_id: profile.user_id,
+              type: 'match',
+              match_id: newMatch.id,
+              from_user_id: user.id,
+              read: false,
+            })
+          } catch (_) {}
+        }
       }
     }
 
