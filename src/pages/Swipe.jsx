@@ -201,8 +201,8 @@ export default function Swipe() {
       {profiles.length === 0 ? (
         <div className="flex-1 flex flex-col items-center justify-center px-8 text-center">
           <span className="text-5xl mb-5">🔍</span>
-          <h2 className="text-xl font-['Pacifico'] text-[#D6E6F3]">No more profiles for now</h2>
-          <p className="text-[#A6C5D7] mt-2">Check back later when more students join!</p>
+          <h2 className="text-xl font-sora font-bold text-[#D6E6F3]">No more profiles for now</h2>
+          <p className="font-pjs text-[#A6C5D7] mt-2">Check back later when more students join!</p>
         </div>
       ) : (
         <>
@@ -247,14 +247,14 @@ export default function Swipe() {
                         )}
 
                         <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-[#000926] to-transparent px-5 pt-14 pb-5">
-                          <h2 className="text-[#F0F4FF] text-xl font-['Pacifico']">
+                          <h2 className="text-[#F0F4FF] text-xl font-sora font-bold">
                             {profile.name}, {profile.age}
                           </h2>
-                          <p className="text-[#D6E6F3]/80 text-sm mt-0.5">
+                          <p className="font-pjs text-[#D6E6F3]/80 text-sm mt-0.5">
                             {profile.branch} &middot; {profile.year}
                           </p>
                           {profile.bio && (
-                            <p className="text-[#D6E6F3]/60 text-sm mt-1.5 leading-snug line-clamp-3">
+                            <p className="font-pjs text-[#D6E6F3]/60 text-sm mt-1.5 leading-snug line-clamp-3">
                               {profile.bio}
                             </p>
                           )}

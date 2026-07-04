@@ -183,7 +183,7 @@ export default function Chat() {
           )}
 
           <div className="min-w-0 flex-1">
-            <p className="font-semibold text-[#F0F4FF] truncate text-sm">
+            <p className="font-sora font-bold text-[#F0F4FF] truncate text-sm">
               {otherProfile?.name || 'Chat'}
             </p>
             {otherProfile && (
@@ -236,7 +236,7 @@ export default function Chat() {
               className={`flex ${isMe ? 'justify-end' : 'justify-start'}`}
             >
               <div
-                className={`max-w-[80%] rounded-2xl px-4 py-2.5 text-sm leading-relaxed ${
+                className={`max-w-[80%] rounded-2xl px-4 py-2.5 text-sm font-pjs leading-relaxed ${
                   isMe
                     ? 'bg-gradient-to-r from-[#0F52BA] to-[#A6C5D7] text-white rounded-br-sm'
                     : 'bg-white/10 text-[#F0F4FF] rounded-bl-sm border border-white/10'
@@ -259,7 +259,7 @@ export default function Chat() {
             onKeyDown={handleKeyDown}
             placeholder="Message…"
             rows={1}
-            className="flex-1 bg-white/5 border border-white/10 rounded-2xl px-4 py-2.5 outline-none focus:border-[#A6C5D7]/50 transition text-sm resize-none max-h-32 text-[#F0F4FF] placeholder-[#A6C5D7]/50"
+            className="flex-1 bg-white/5 border border-white/10 rounded-2xl px-4 py-2.5 outline-none focus:border-[#A6C5D7]/50 transition text-sm font-pjs resize-none max-h-32 text-[#F0F4FF] placeholder-[#A6C5D7]/50"
             style={{ height: 'auto', minHeight: 40 }}
             onInput={(e) => {
               e.target.style.height = 'auto'

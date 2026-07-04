@@ -24,7 +24,7 @@ export default function Navbar() {
               }`}
             >
               <span className="text-xl leading-none">{tab.icon}</span>
-              <span className={`text-[10px] font-medium ${active ? 'text-[#A6C5D7]' : 'text-[#A6C5D7]/40'}`}>
+              <span className={`text-[10px] font-pjs font-medium ${active ? 'text-[#A6C5D7]' : 'text-[#A6C5D7]/40'}`}>
                 {tab.label}
               </span>
             </button>

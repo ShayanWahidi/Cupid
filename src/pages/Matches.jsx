@@ -73,8 +73,8 @@ export default function Matches() {
       {matches.length === 0 ? (
         <div className="flex-1 flex flex-col items-center justify-center px-8 text-center">
           <p className="text-4xl mb-4">💫</p>
-          <p className="text-[#A6C5D7] text-lg font-['Pacifico']">No matches yet.</p>
-          <p className="text-[#A6C5D7]/60 text-sm mt-1">Keep swiping!</p>
+          <p className="text-[#A6C5D7] text-lg font-sora font-bold">No matches yet.</p>
+          <p className="font-pjs text-[#A6C5D7]/60 text-sm mt-1">Keep swiping!</p>
         </div>
       ) : (
         <div className="flex-1 overflow-y-auto px-6 pb-4">
@@ -99,11 +99,11 @@ export default function Matches() {
                   <div className="w-14 h-14 rounded-full bg-white/10 shrink-0 ring-2 ring-[#A6C5D7]/30" />
                 )}
                 <div className="min-w-0">
-                  <p className="font-semibold text-[#F0F4FF] truncate">
+                  <p className="font-sora font-bold text-[#F0F4FF] truncate">
                     {profile?.name || 'Unknown'}
                   </p>
                   {profile && (
-                    <p className="text-sm text-[#A6C5D7]/70 truncate">
+                    <p className="font-pjs text-sm text-[#A6C5D7]/70 truncate">
                       {profile.branch} &middot; {profile.year}
                     </p>
                   )}

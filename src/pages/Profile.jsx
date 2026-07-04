@@ -14,14 +14,14 @@ const MAX_PHOTOS = 4
 function PillSelector({ options, value, onChange, label }) {
   return (
     <div>
-      <p className="text-sm font-medium mb-2 text-[#A6C5D7]">{label}</p>
+      <p className="text-sm font-pjs font-medium mb-2 text-[#A6C5D7]">{label}</p>
       <div className="flex gap-2 flex-wrap">
         {options.map((opt) => (
           <button
             type="button"
             key={opt}
             onClick={() => onChange(opt)}
-            className={`px-5 py-2 rounded-full text-sm font-medium border transition ${
+            className={`px-5 py-2 rounded-full text-sm font-pjs font-semibold border transition ${
               value === opt
                 ? 'bg-[#0F52BA] border-[#A6C5D7] text-white'
                 : 'bg-transparent border-[#A6C5D7]/30 text-[#A6C5D7]'
@@ -223,7 +223,7 @@ export default function Profile() {
 
           <div className="px-6 pt-4 pb-6 space-y-1">
             <div className="flex items-center gap-2">
-              <h2 className="text-xl font-['Pacifico'] text-[#F0F4FF]">
+              <h2 className="text-xl font-sora font-bold text-[#F0F4FF]">
                 {profile?.name}, {profile?.age}
               </h2>
               <button
@@ -236,17 +236,17 @@ export default function Profile() {
               </button>
             </div>
             <div className="bg-white/5 rounded-2xl border border-white/10 p-4 space-y-1">
-              <p className="text-[#A6C5D7] text-sm">Branch & Year</p>
-              <p className="text-[#F0F4FF]">{profile?.branch} &middot; {profile?.year}</p>
+              <p className="font-pjs text-[#A6C5D7] text-sm">Branch & Year</p>
+              <p className="font-pjs text-[#F0F4FF]">{profile?.branch} &middot; {profile?.year}</p>
             </div>
             <div className="bg-white/5 rounded-2xl border border-white/10 p-4 space-y-1">
-              <p className="text-[#A6C5D7] text-sm">Interests</p>
-              <p className="text-[#F0F4FF] capitalize">{profile?.gender?.toLowerCase()} &middot; Interested in {profile?.preference?.toLowerCase()}</p>
+              <p className="font-pjs text-[#A6C5D7] text-sm">Interests</p>
+              <p className="font-pjs text-[#F0F4FF] capitalize">{profile?.gender?.toLowerCase()} &middot; Interested in {profile?.preference?.toLowerCase()}</p>
             </div>
             {profile?.bio && (
               <div className="bg-white/5 rounded-2xl border border-white/10 p-4 space-y-1">
-                <p className="text-[#A6C5D7] text-sm">Bio</p>
-                <p className="text-[#F0F4FF] leading-relaxed">{profile.bio}</p>
+                <p className="font-pjs text-[#A6C5D7] text-sm">Bio</p>
+                <p className="font-pjs text-[#F0F4FF] leading-relaxed">{profile.bio}</p>
               </div>
             )}
           </div>
@@ -278,7 +278,7 @@ export default function Profile() {
 
       <div className="flex-1 overflow-y-auto px-6 pb-6 space-y-5">
         <div>
-          <p className="text-sm font-medium mb-2 text-[#A6C5D7]">Photos ({photoCount}/{MAX_PHOTOS})</p>
+          <p className="font-pjs text-sm font-medium mb-2 text-[#A6C5D7]">Photos ({photoCount}/{MAX_PHOTOS})</p>
           <div className="grid grid-cols-4 gap-2">
             {Array.from({ length: MAX_PHOTOS }).map((_, i) => {
               const existing = existingPhotos[i]
@@ -338,7 +338,7 @@ export default function Profile() {
         </div>
 
         <div>
-          <label className="text-sm font-medium mb-1.5 block text-[#A6C5D7]">Full name</label>
+          <label className="font-pjs text-sm font-medium mb-1.5 block text-[#A6C5D7]">Full name</label>
           <input
             type="text"
             value={form.name}
@@ -348,7 +348,7 @@ export default function Profile() {
         </div>
 
         <div>
-          <label className="text-sm font-medium mb-1.5 block text-[#A6C5D7]">Age</label>
+          <label className="font-pjs text-sm font-medium mb-1.5 block text-[#A6C5D7]">Age</label>
           <input
             type="number"
             min={18}
@@ -360,7 +360,7 @@ export default function Profile() {
         </div>
 
         <div>
-          <label className="text-sm font-medium mb-1.5 block text-[#A6C5D7]">Branch</label>
+          <label className="font-pjs text-sm font-medium mb-1.5 block text-[#A6C5D7]">Branch</label>
           <select
             value={form.branch}
             onChange={(e) => update('branch', e.target.value)}
@@ -374,7 +374,7 @@ export default function Profile() {
         </div>
 
         <div>
-          <label className="text-sm font-medium mb-1.5 block text-[#A6C5D7]">Year</label>
+          <label className="font-pjs text-sm font-medium mb-1.5 block text-[#A6C5D7]">Year</label>
           <select
             value={form.year}
             onChange={(e) => update('year', e.target.value)}
@@ -391,7 +391,7 @@ export default function Profile() {
         <PillSelector label="Interested in" options={PREFERENCES} value={form.preference} onChange={(v) => update('preference', v)} />
 
         <div>
-          <label className="text-sm font-medium mb-1.5 block text-[#A6C5D7]">Bio</label>
+          <label className="font-pjs text-sm font-medium mb-1.5 block text-[#A6C5D7]">Bio</label>
           <textarea
             maxLength={150}
             value={form.bio}
@@ -410,7 +410,7 @@ export default function Profile() {
           disabled={saving}
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
-          className="w-full bg-gradient-to-r from-[#0F52BA] to-[#A6C5D7] text-white rounded-2xl py-3.5 font-medium disabled:opacity-50 transition"
+          className="w-full bg-gradient-to-r from-[#0F52BA] to-[#A6C5D7] text-white rounded-2xl py-3.5 font-pjs font-semibold disabled:opacity-50 transition"
         >
           {saving ? 'Saving…' : 'Save'}
         </motion.button>

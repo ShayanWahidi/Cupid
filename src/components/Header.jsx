@@ -83,7 +83,7 @@ export default function Header() {
   return (
     <>
       <div className="flex items-center justify-between h-14 px-6 shrink-0 bg-[#000926]/80 backdrop-blur-md">
-        <h1 className="text-xl font-['Pacifico'] text-[#D6E6F3]">JSSpark</h1>
+        <h1 className="text-xl font-sora font-bold text-[#D6E6F3]">JSSpark</h1>
 
         <div className="relative">
           <button
@@ -108,7 +108,7 @@ export default function Header() {
                 className="absolute top-10 right-0 z-50 w-80 max-w-[calc(100vw-32px)] bg-[#000926]/95 backdrop-blur-xl rounded-2xl border border-white/10 max-h-[70dvh] overflow-y-auto"
               >
                 <div className="px-4 py-3 border-b border-white/10">
-                  <p className="text-sm font-semibold text-[#F0F4FF]">Notifications</p>
+                  <p className="text-sm font-pjs font-semibold text-[#F0F4FF]">Notifications</p>
                 </div>
                 {notifications.length === 0 ? (
                   <div className="px-4 py-10 text-center text-sm text-[#A6C5D7]/60">
@@ -164,12 +164,12 @@ function NotificationItem({ notif, onClick }) {
         <div className="w-10 h-10 rounded-full bg-white/10 shrink-0 ring-2 ring-[#A6C5D7]/30" />
       )}
       <div className="min-w-0 flex-1">
-        <p className="text-sm text-[#F0F4FF] leading-snug">
+        <p className="text-sm font-pjs text-[#F0F4FF] leading-snug">
           {notif.type === 'match'
             ? `You matched with ${profile?.name || 'someone'}! 💜`
             : notif.type}
         </p>
-        <p className="text-xs text-[#A6C5D7]/60 mt-0.5">
+        <p className="text-xs font-pjs text-[#A6C5D7]/60 mt-0.5">
           {timeAgo(notif.created_at)}
         </p>
       </div>

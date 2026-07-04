@@ -17,8 +17,8 @@ export default function MatchModal() {
         transition={{ duration: 0.3 }}
         className="w-full max-w-sm px-8 py-10 text-center"
       >
-        <BlurText text="It's a Match! 💙" className="font-['Pacifico'] text-4xl text-[#D6E6F3] justify-center" delay={150} />
-        <p className="text-[#A6C5D7] mb-6 mt-2">
+          <h1 className="font-sora font-bold text-4xl text-[#D6E6F3]">It's a Match! 💙</h1>
+        <p className="font-pjs text-[#A6C5D7] mb-6 mt-2">
           You and {matchedUser.name} liked each other
         </p>
 
@@ -35,7 +35,7 @@ export default function MatchModal() {
             onClick={dismissMatch}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            className="w-full bg-gradient-to-r from-[#0F52BA] to-[#A6C5D7] text-white rounded-2xl py-3.5 font-medium transition"
+            className="w-full bg-gradient-to-r from-[#0F52BA] to-[#A6C5D7] text-white rounded-2xl py-3.5 font-pjs font-semibold transition"
           >
             Keep Swiping
           </motion.button>
@@ -46,7 +46,7 @@ export default function MatchModal() {
             }}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            className="w-full border border-[#A6C5D7]/30 text-[#A6C5D7] rounded-2xl py-3.5 font-medium active:bg-white/5 transition"
+            className="w-full border border-[#A6C5D7]/30 text-[#A6C5D7] rounded-2xl py-3.5 font-pjs font-semibold active:bg-white/5 transition"
           >
             Send Message
           </motion.button>
