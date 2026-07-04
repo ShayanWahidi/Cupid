@@ -16,13 +16,16 @@ export default function Chat() {
   const [loading, setLoading] = useState(true)
   const [menuOpen, setMenuOpen] = useState(false)
   const [showProfile, setShowProfile] = useState(false)
+  const [otherTyping, setOtherTyping] = useState(false)
   const bottomRef = useRef(null)
   const inputRef = useRef(null)
+  const typingTimeoutRef = useRef(null)
 
   useEffect(() => {
     if (!user || !matchId) return
     initChat()
     return () => {
+      if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current)
       supabase.removeAllChannels()
     }
   }, [user, matchId])
@@ -63,7 +66,7 @@ export default function Chat() {
     setMessages(msgRows || [])
     setLoading(false)
 
-    const channel = supabase
+    supabase
       .channel(`messages:${matchId}`)
       .on(
         'postgres_changes',
@@ -79,6 +82,48 @@ export default function Chat() {
           }
         }
       )
+      .on(
+        'postgres_changes',
+        {
+          event: 'DELETE',
+          schema: 'public',
+          table: 'messages',
+          filter: `match_id=eq.${matchId}`,
+        },
+        (payload) => {
+          setMessages((prev) => prev.filter((m) => m.id !== payload.old.id))
+        }
+      )
+      .subscribe()
+
+    supabase
+      .channel(`typing:${matchId}`)
+      .on(
+        'postgres_changes',
+        {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'typing_status',
+          filter: `match_id=eq.${matchId}`,
+        },
+        (payload) => {
+          if (payload.new.user_id !== user.id) {
+            setOtherTyping(true)
+          }
+        }
+      )
+      .on(
+        'postgres_changes',
+        {
+          event: 'DELETE',
+          schema: 'public',
+          table: 'typing_status',
+          filter: `match_id=eq.${matchId}`,
+        },
+        () => {
+          setOtherTyping(false)
+        }
+      )
       .subscribe()
   }
 
@@ -86,9 +131,45 @@ export default function Chat() {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages])
 
+  const handleTyping = () => {
+    if (!typingTimeoutRef.current) {
+      supabase.from('typing_status').insert({
+        user_id: user.id,
+        match_id: matchId,
+      }).then(({ error }) => {
+        if (error && error.code !== '23505') {
+          console.error('Typing insert error:', error)
+        }
+      })
+    }
+
+    if (typingTimeoutRef.current) {
+      clearTimeout(typingTimeoutRef.current)
+    }
+
+    typingTimeoutRef.current = setTimeout(() => {
+      supabase.from('typing_status')
+        .delete()
+        .eq('user_id', user.id)
+        .eq('match_id', matchId)
+        .then(() => {})
+      typingTimeoutRef.current = null
+    }, 3000)
+  }
+
   const handleSend = async () => {
     const text = input.trim()
     if (!text || sending) return
+
+    if (typingTimeoutRef.current) {
+      clearTimeout(typingTimeoutRef.current)
+      typingTimeoutRef.current = null
+    }
+    supabase.from('typing_status')
+      .delete()
+      .eq('user_id', user.id)
+      .eq('match_id', matchId)
+      .then(() => {})
 
     setSending(true)
     setInput('')
@@ -250,6 +331,22 @@ export default function Chat() {
         <div ref={bottomRef} />
       </div>
 
+      {otherTyping && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="px-4 py-1.5 text-sm text-[#A6C5D7] font-pjs"
+        >
+          {otherProfile?.name} is typing
+          <span className="inline-flex ml-1">
+            <span className="animate-bounce mx-0.5" style={{ animationDelay: '0ms' }}>•</span>
+            <span className="animate-bounce mx-0.5" style={{ animationDelay: '150ms' }}>•</span>
+            <span className="animate-bounce mx-0.5" style={{ animationDelay: '300ms' }}>•</span>
+          </span>
+        </motion.div>
+      )}
+
       <div className="border-t border-white/10 px-4 py-3 shrink-0">
         <div className="flex items-end gap-2">
           <textarea
@@ -264,6 +361,7 @@ export default function Chat() {
             onInput={(e) => {
               e.target.style.height = 'auto'
               e.target.style.height = `${e.target.scrollHeight}px`
+              handleTyping()
             }}
           />
           <motion.button

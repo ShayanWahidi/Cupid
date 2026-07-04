@@ -46,13 +46,35 @@ export default function Matches() {
       })
     }
 
+    const matchIds = matchRows.map((m) => m.id)
+    const latestMsgMap = {}
+
+    if (matchIds.length > 0) {
+      const { data: msgs } = await supabase
+        .from('messages')
+        .select('match_id, created_at')
+        .in('match_id', matchIds)
+        .order('created_at', { ascending: false })
+
+      if (msgs) {
+        msgs.forEach((msg) => {
+          if (!latestMsgMap[msg.match_id]) {
+            latestMsgMap[msg.match_id] = msg.created_at
+          }
+        })
+      }
+    }
+
     const combined = matchRows.map((m) => {
       const otherId = m.user1_id === user.id ? m.user2_id : m.user1_id
       return {
         matchId: m.id,
         profile: profileMap[otherId] || null,
+        latestMsgAt: latestMsgMap[m.id] || m.created_at,
       }
     })
+
+    combined.sort((a, b) => new Date(b.latestMsgAt) - new Date(a.latestMsgAt))
 
     setMatches(combined)
     setLoading(false)
