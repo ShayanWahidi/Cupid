@@ -63,9 +63,11 @@ export default function Chat() {
       .eq('match_id', matchId)
       .order('created_at', { ascending: true })
 
+    console.log('Initial messages fetched:', msgRows)
     setMessages(msgRows || [])
     setLoading(false)
 
+    console.log('Setting up realtime channel for match:', matchId)
     supabase
       .channel(`messages:${matchId}`)
       .on(
@@ -77,6 +79,7 @@ export default function Chat() {
           filter: `match_id=eq.${matchId}`,
         },
         (payload) => {
+          console.log('New message received:', payload)
           if (payload.new.sender_id !== user.id) {
             setMessages((prev) => [...prev, payload.new])
           }
@@ -91,11 +94,15 @@ export default function Chat() {
           filter: `match_id=eq.${matchId}`,
         },
         (payload) => {
+          console.log('Message deleted:', payload)
           setMessages((prev) => prev.filter((m) => m.id !== payload.old.id))
         }
       )
-      .subscribe()
+      .subscribe((status) => {
+        console.log('Messages channel status:', status)
+      })
 
+    console.log('Setting up typing channel for match:', matchId)
     supabase
       .channel(`typing:${matchId}`)
       .on(
@@ -107,6 +114,7 @@ export default function Chat() {
           filter: `match_id=eq.${matchId}`,
         },
         (payload) => {
+          console.log('Typing insert received:', payload)
           if (payload.new.user_id !== user.id) {
             setOtherTyping(true)
           }
@@ -120,11 +128,14 @@ export default function Chat() {
           table: 'typing_status',
           filter: `match_id=eq.${matchId}`,
         },
-        () => {
+        (payload) => {
+          console.log('Typing delete received:', payload)
           setOtherTyping(false)
         }
       )
-      .subscribe()
+      .subscribe((status) => {
+        console.log('Typing channel status:', status)
+      })
   }
 
   useEffect(() => {
