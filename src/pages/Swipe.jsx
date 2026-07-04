@@ -177,7 +177,7 @@ export default function Swipe() {
     await supabase.from('swipes').delete()
       .eq('swiper_id', user.id)
       .eq('swiped_id', lastSwiped.user_id)
-    setProfiles((prev) => [lastSwiped, ...prev])
+    setProfiles((prev) => [...prev, lastSwiped])
     setLastSwiped(null)
   }
 
