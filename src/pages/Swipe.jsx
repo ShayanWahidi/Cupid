@@ -2,7 +2,7 @@ import React from 'react'
 import { useState, useRef, useMemo, useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion } from 'motion/react'
-import { XMarkIcon, EllipsisVerticalIcon, FlagIcon, NoSymbolIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline'
+import { XMarkIcon, EllipsisVerticalIcon, FlagIcon, NoSymbolIcon, MagnifyingGlassIcon, ArrowUturnLeftIcon } from '@heroicons/react/24/outline'
 import { HeartIcon as HeartSolid } from '@heroicons/react/24/solid'
 import TinderCard from 'react-tinder-card'
 import { supabase } from '../lib/supabase'
@@ -23,7 +23,6 @@ export default function Swipe() {
   const [lastSwiped, setLastSwiped] = useState(null)
   const swipingRef = useRef(false)
   const profilesRef = useRef(profiles)
-  const undoTimerRef = useRef(null)
 
   useEffect(() => {
     profilesRef.current = profiles
@@ -37,9 +36,6 @@ export default function Swipe() {
   useEffect(() => {
     if (!user) return
     fetchProfiles()
-    return () => {
-      if (undoTimerRef.current) clearTimeout(undoTimerRef.current)
-    }
   }, [user])
 
   const fetchProfiles = async () => {
@@ -151,12 +147,7 @@ export default function Swipe() {
       }
     }
 
-    if (undoTimerRef.current) clearTimeout(undoTimerRef.current)
     setLastSwiped(profile)
-    undoTimerRef.current = setTimeout(() => {
-      setLastSwiped(null)
-      undoTimerRef.current = null
-    }, 5000)
 
     setProfiles((prev) => prev.filter((_, i) => i !== index))
     swipingRef.current = false
@@ -170,10 +161,6 @@ export default function Swipe() {
 
   const handleUndo = async () => {
     if (!lastSwiped) return
-    if (undoTimerRef.current) {
-      clearTimeout(undoTimerRef.current)
-      undoTimerRef.current = null
-    }
     await supabase.from('swipes').delete()
       .eq('swiper_id', user.id)
       .eq('swiped_id', lastSwiped.user_id)
@@ -225,19 +212,6 @@ export default function Swipe() {
   return (
     <div className="flex flex-col h-dvh pb-16 bg-[#000926]">
       <Header />
-      {lastSwiped && (
-        <div className="flex justify-center py-2">
-          <motion.button
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0 }}
-            onClick={handleUndo}
-            className="text-sm text-[#A6C5D7] font-pjs hover:text-[#D6E6F3] transition-colors"
-          >
-            ↩ Undo
-          </motion.button>
-        </div>
-      )}
       {profiles.length === 0 ? (
         <div className="flex-1 flex flex-col items-center justify-center px-8 text-center">
           <span className="mb-5">
@@ -348,6 +322,18 @@ export default function Swipe() {
           </div>
 
           <div className="flex items-center justify-center gap-8 py-6 pb-8">
+            <motion.button
+              onClick={handleUndo}
+              whileHover={{ scale: lastSwiped ? 1.1 : 1 }}
+              whileTap={{ scale: lastSwiped ? 0.9 : 1 }}
+              className={`w-16 h-16 rounded-full border-2 flex items-center justify-center transition shadow-sm ${
+                lastSwiped
+                  ? 'border-[#A6C5D7] text-[#A6C5D7]'
+                  : 'border-[#A6C5D7]/20 text-[#A6C5D7]/20 cursor-not-allowed'
+              }`}
+            >
+              <ArrowUturnLeftIcon className="w-8 h-8" />
+            </motion.button>
             <motion.button
               onClick={() => swipe('left')}
               whileHover={{ scale: 1.1 }}
