@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { motion } from 'motion/react'
 import { ArrowLeftIcon, PaperAirplaneIcon, EllipsisVerticalIcon, FlagIcon, NoSymbolIcon } from '@heroicons/react/24/outline'
+import logo from '../assets/logo.png'
 import { supabase } from '../lib/supabase'
 import { useAuth } from '../hooks/useAuth'
 import UserProfileModal from '../components/UserProfileModal'
@@ -268,6 +269,8 @@ export default function Chat() {
         >
           <ArrowLeftIcon className="w-5 h-5 text-[#D6E6F3]" />
         </button>
+
+        <img src={logo} alt="Cupid" className="h-8 w-8 rounded-full drop-shadow-lg shrink-0" />
 
         <button
           onClick={() => setShowProfile(true)}

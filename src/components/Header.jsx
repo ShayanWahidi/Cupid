@@ -4,6 +4,7 @@ import { BellIcon, HeartIcon } from '@heroicons/react/24/outline'
 import { supabase } from '../lib/supabase'
 import { useAuth } from '../hooks/useAuth'
 import UserProfileModal from './UserProfileModal'
+import logo from '../assets/logo.png'
 
 function timeAgo(dateStr) {
   const diff = Date.now() - new Date(dateStr).getTime()
@@ -84,7 +85,10 @@ export default function Header() {
   return (
     <>
       <div className="flex items-center justify-between h-14 px-6 shrink-0 bg-[#000926]/80 backdrop-blur-md">
-        <h1 className="text-xl font-sora font-bold text-[#D6E6F3]">Cupid</h1>
+        <div className="flex items-center gap-2">
+          <img src={logo} alt="Cupid" className="h-8 w-8 rounded-full drop-shadow-lg" />
+          <h1 className="font-sora font-bold text-[#F0F4FF] text-xl">Cupid</h1>
+        </div>
 
         <div className="relative">
           <button
