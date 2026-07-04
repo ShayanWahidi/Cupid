@@ -56,7 +56,7 @@ export default function Signup() {
   return (
     <div className="flex flex-col min-h-dvh bg-gradient-to-b from-[#000926] to-[#0F52BA] px-6">
       <motion.button
-        onClick={() => navigate('/')}
+        onClick={() => navigate('/login')}
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
         className="w-9 h-9 flex items-center justify-center rounded-full mt-3 -ml-1 shrink-0"
