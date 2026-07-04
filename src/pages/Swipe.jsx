@@ -20,8 +20,10 @@ export default function Swipe() {
   const [showMatch, setShowMatch] = useState(false)
   const [matchedUser, setMatchedUser] = useState(null)
   const [menuOpen, setMenuOpen] = useState(null)
+  const [lastSwiped, setLastSwiped] = useState(null)
   const swipingRef = useRef(false)
   const profilesRef = useRef(profiles)
+  const undoTimerRef = useRef(null)
 
   useEffect(() => {
     profilesRef.current = profiles
@@ -35,6 +37,9 @@ export default function Swipe() {
   useEffect(() => {
     if (!user) return
     fetchProfiles()
+    return () => {
+      if (undoTimerRef.current) clearTimeout(undoTimerRef.current)
+    }
   }, [user])
 
   const fetchProfiles = async () => {
@@ -146,6 +151,13 @@ export default function Swipe() {
       }
     }
 
+    if (undoTimerRef.current) clearTimeout(undoTimerRef.current)
+    setLastSwiped(profile)
+    undoTimerRef.current = setTimeout(() => {
+      setLastSwiped(null)
+      undoTimerRef.current = null
+    }, 5000)
+
     setProfiles((prev) => prev.filter((_, i) => i !== index))
     swipingRef.current = false
   }, [user, triggerMatch])
@@ -154,6 +166,19 @@ export default function Swipe() {
     const topIdx = profiles.length - 1
     if (topIdx < 0) return
     await childRefs[topIdx]?.current?.swipe(dir)
+  }
+
+  const handleUndo = async () => {
+    if (!lastSwiped) return
+    if (undoTimerRef.current) {
+      clearTimeout(undoTimerRef.current)
+      undoTimerRef.current = null
+    }
+    await supabase.from('swipes').delete()
+      .eq('swiper_id', user.id)
+      .eq('swiped_id', lastSwiped.user_id)
+    setLastSwiped(null)
+    fetchProfiles()
   }
 
   const handleReport = async (profile) => {
@@ -200,6 +225,19 @@ export default function Swipe() {
   return (
     <div className="flex flex-col h-dvh pb-16 bg-[#000926]">
       <Header />
+      {lastSwiped && (
+        <div className="flex justify-center py-2">
+          <motion.button
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0 }}
+            onClick={handleUndo}
+            className="text-sm text-[#A6C5D7] font-pjs hover:text-[#D6E6F3] transition-colors"
+          >
+            ↩ Undo
+          </motion.button>
+        </div>
+      )}
       {profiles.length === 0 ? (
         <div className="flex-1 flex flex-col items-center justify-center px-8 text-center">
           <span className="mb-5">
