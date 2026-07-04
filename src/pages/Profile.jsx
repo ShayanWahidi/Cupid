@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion } from 'motion/react'
+import { PencilIcon } from '@heroicons/react/24/outline'
 import { supabase } from '../lib/supabase'
 import { useAuth } from '../hooks/useAuth'
 import Header from '../components/Header'
@@ -230,9 +231,7 @@ export default function Profile() {
                 onClick={startEdit}
                 className="w-7 h-7 flex items-center justify-center rounded-full shrink-0"
               >
-                <svg className="w-4 h-4 text-[#A6C5D7]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-                </svg>
+                <PencilIcon className="w-4 h-4 text-[#A6C5D7]" />
               </button>
             </div>
             <div className="bg-white/5 rounded-2xl border border-white/10 p-4 space-y-1">

@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
 import { motion } from 'motion/react'
+import { BellIcon, HeartIcon } from '@heroicons/react/24/outline'
 import { supabase } from '../lib/supabase'
 import { useAuth } from '../hooks/useAuth'
 import UserProfileModal from './UserProfileModal'
@@ -88,9 +89,9 @@ export default function Header() {
         <div className="relative">
           <button
             onClick={() => setShowPanel((prev) => !prev)}
-            className="w-9 h-9 rounded-full flex items-center justify-center text-lg leading-none transition text-[#A6C5D7]"
+            className="w-9 h-9 rounded-full flex items-center justify-center transition text-[#A6C5D7]"
           >
-            🔔
+            <BellIcon className="w-6 h-6" />
             {unreadCount > 0 && (
               <span className="absolute -top-0.5 -right-0.5 w-4 h-4 rounded-full bg-red-500 text-white text-[9px] font-bold flex items-center justify-center">
                 {unreadCount > 9 ? '9+' : unreadCount}
@@ -166,7 +167,7 @@ function NotificationItem({ notif, onClick }) {
       <div className="min-w-0 flex-1">
         <p className="text-sm font-pjs text-[#F0F4FF] leading-snug">
           {notif.type === 'match'
-            ? `You matched with ${profile?.name || 'someone'}! 💜`
+            ? <>You matched with {profile?.name || 'someone'}! <HeartIcon className="w-3.5 h-3.5 inline text-[#A6C5D7]" /></>
             : notif.type}
         </p>
         <p className="text-xs font-pjs text-[#A6C5D7]/60 mt-0.5">

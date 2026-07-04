@@ -1,9 +1,10 @@
 import { useLocation, useNavigate } from 'react-router-dom'
+import { SparklesIcon, HeartIcon, UserIcon } from '@heroicons/react/24/outline'
 
 const tabs = [
-  { path: '/swipe', label: 'Swipe', icon: '🔥' },
-  { path: '/matches', label: 'Matches', icon: '💜' },
-  { path: '/profile', label: 'Profile', icon: '👤' },
+  { path: '/swipe', label: 'Swipe', icon: SparklesIcon },
+  { path: '/matches', label: 'Matches', icon: HeartIcon },
+  { path: '/profile', label: 'Profile', icon: UserIcon },
 ]
 
 export default function Navbar() {
@@ -20,10 +21,10 @@ export default function Navbar() {
               key={tab.path}
               onClick={() => navigate(tab.path)}
               className={`flex flex-col items-center justify-center gap-0.5 w-20 h-full rounded-xl transition ${
-                active ? 'text-[#A6C5D7] drop-shadow-[0_0_8px_#A6C5D7]' : 'text-[#A6C5D7]/40'
+                active ? 'text-[#A6C5D7]' : 'text-[#A6C5D7]/40'
               }`}
             >
-              <span className="text-xl leading-none">{tab.icon}</span>
+              <tab.icon className="w-6 h-6" />
               <span className={`text-[10px] font-pjs font-medium ${active ? 'text-[#A6C5D7]' : 'text-[#A6C5D7]/40'}`}>
                 {tab.label}
               </span>

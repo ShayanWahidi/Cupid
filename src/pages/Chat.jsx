@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { motion } from 'motion/react'
+import { ArrowLeftIcon, PaperAirplaneIcon, EllipsisVerticalIcon, FlagIcon, NoSymbolIcon } from '@heroicons/react/24/outline'
 import { supabase } from '../lib/supabase'
 import { useAuth } from '../hooks/useAuth'
 import UserProfileModal from '../components/UserProfileModal'
@@ -265,9 +266,7 @@ export default function Chat() {
           onClick={() => navigate('/matches')}
           className="w-9 h-9 flex items-center justify-center rounded-full shrink-0"
         >
-          <svg className="w-5 h-5 text-[#D6E6F3]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
-          </svg>
+          <ArrowLeftIcon className="w-5 h-5 text-[#D6E6F3]" />
         </button>
 
         <button
@@ -301,7 +300,7 @@ export default function Chat() {
             onClick={() => setMenuOpen(!menuOpen)}
             className="w-9 h-9 flex items-center justify-center rounded-full text-[#A6C5D7]"
           >
-            &#8942;
+            <EllipsisVerticalIcon className="w-5 h-5" />
           </button>
           {menuOpen && (
             <>
@@ -309,15 +308,17 @@ export default function Chat() {
               <div className="absolute top-10 right-0 z-20 bg-[#000926] rounded-xl shadow-xl border border-white/10 w-44 overflow-hidden">
                 <button
                   onClick={handleReport}
-                  className="w-full px-4 py-3 text-sm text-left text-[#A6C5D7] active:bg-white/5 transition"
+                  className="w-full px-4 py-3 text-sm text-left text-[#A6C5D7] active:bg-white/5 transition flex items-center gap-2"
                 >
+                  <FlagIcon className="w-4 h-4" />
                   Report {otherProfile?.name || 'user'}
                 </button>
                 <div className="h-px bg-white/10" />
                 <button
                   onClick={handleBlock}
-                  className="w-full px-4 py-3 text-sm text-left text-red-400 active:bg-white/5 transition"
+                  className="w-full px-4 py-3 text-sm text-left text-red-400 active:bg-white/5 transition flex items-center gap-2"
                 >
+                  <NoSymbolIcon className="w-4 h-4" />
                   Block {otherProfile?.name || 'user'}
                 </button>
               </div>
@@ -404,9 +405,7 @@ export default function Chat() {
             whileTap={{ scale: 0.95 }}
             className="w-10 h-10 rounded-xl bg-[#0F52BA] text-white flex items-center justify-center shrink-0 disabled:opacity-30 transition"
           >
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M5 12h14M12 5l7 7-7 7" />
-            </svg>
+            <PaperAirplaneIcon className="w-5 h-5" />
           </motion.button>
         </div>
       </div>

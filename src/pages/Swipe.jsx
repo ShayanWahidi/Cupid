@@ -2,6 +2,8 @@ import React from 'react'
 import { useState, useRef, useMemo, useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion } from 'motion/react'
+import { XMarkIcon, EllipsisVerticalIcon, FlagIcon, NoSymbolIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline'
+import { HeartIcon as HeartSolid } from '@heroicons/react/24/solid'
 import TinderCard from 'react-tinder-card'
 import { supabase } from '../lib/supabase'
 import { useAuth } from '../hooks/useAuth'
@@ -200,7 +202,9 @@ export default function Swipe() {
       <Header />
       {profiles.length === 0 ? (
         <div className="flex-1 flex flex-col items-center justify-center px-8 text-center">
-          <span className="text-5xl mb-5">🔍</span>
+          <span className="mb-5">
+            <MagnifyingGlassIcon className="w-12 h-12 text-[#A6C5D7]/40" />
+          </span>
           <h2 className="text-xl font-sora font-bold text-[#D6E6F3]">No more profiles for now</h2>
           <p className="font-pjs text-[#A6C5D7] mt-2">Check back later when more students join!</p>
         </div>
@@ -266,9 +270,9 @@ export default function Swipe() {
                               onClick={() =>
                                 setMenuOpen(menuOpen === profile.user_id ? null : profile.user_id)
                               }
-                              className="w-8 h-8 rounded-full bg-black/40 flex items-center justify-center text-white text-lg leading-none"
+                              className="w-8 h-8 rounded-full bg-black/40 flex items-center justify-center text-white"
                             >
-                              &#8942;
+                              <EllipsisVerticalIcon className="w-5 h-5" />
                             </button>
                             {menuOpen === profile.user_id && (
                               <>
@@ -279,15 +283,17 @@ export default function Swipe() {
                                 <div className="absolute top-10 right-0 z-20 bg-[#000926] rounded-xl shadow-xl border border-white/10 w-44 overflow-hidden">
                                   <button
                                     onClick={() => handleReport(profile)}
-                                    className="w-full px-4 py-3 text-sm text-left text-[#A6C5D7] active:bg-white/5 transition"
+                                    className="w-full px-4 py-3 text-sm text-left text-[#A6C5D7] active:bg-white/5 transition flex items-center gap-2"
                                   >
+                                    <FlagIcon className="w-4 h-4" />
                                     Report {profile.name}
                                   </button>
                                   <div className="h-px bg-white/10" />
                                   <button
                                     onClick={() => handleBlock(profile)}
-                                    className="w-full px-4 py-3 text-sm text-left text-red-400 active:bg-white/5 transition"
+                                    className="w-full px-4 py-3 text-sm text-left text-red-400 active:bg-white/5 transition flex items-center gap-2"
                                   >
+                                    <NoSymbolIcon className="w-4 h-4" />
                                     Block {profile.name}
                                   </button>
                                 </div>
@@ -308,17 +314,17 @@ export default function Swipe() {
               onClick={() => swipe('left')}
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
-              className="w-16 h-16 rounded-full border-2 border-[#A6C5D7]/40 flex items-center justify-center text-3xl text-[#A6C5D7] transition shadow-sm"
+              className="w-16 h-16 rounded-full border-2 border-[#A6C5D7]/40 flex items-center justify-center text-[#A6C5D7] transition shadow-sm"
             >
-              &#10005;
+              <XMarkIcon className="w-8 h-8" />
             </motion.button>
             <motion.button
               onClick={() => swipe('right')}
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
-              className="w-16 h-16 rounded-full bg-gradient-to-r from-[#0F52BA] to-[#A6C5D7] flex items-center justify-center text-3xl text-white shadow-sm"
+              className="w-16 h-16 rounded-full bg-gradient-to-r from-[#0F52BA] to-[#A6C5D7] flex items-center justify-center text-white shadow-sm"
             >
-              &#9829;
+              <HeartSolid className="w-8 h-8" />
             </motion.button>
           </div>
         </>
