@@ -84,7 +84,7 @@ export default function Header() {
   return (
     <>
       <div className="flex items-center justify-between h-14 px-6 shrink-0 bg-[#000926]/80 backdrop-blur-md">
-        <h1 className="text-xl font-sora font-bold text-[#D6E6F3]">JSSpark</h1>
+        <h1 className="text-xl font-sora font-bold text-[#D6E6F3]">Cupid</h1>
 
         <div className="relative">
           <button
