@@ -144,6 +144,7 @@ export default function Chat() {
 
   const handleTyping = () => {
     if (!typingTimeoutRef.current) {
+      console.log('User typing, inserting into typing_status...')
       supabase.from('typing_status').insert({
         user_id: user.id,
         match_id: matchId,
@@ -159,6 +160,7 @@ export default function Chat() {
     }
 
     typingTimeoutRef.current = setTimeout(() => {
+      console.log('Typing timeout expired, deleting typing_status...')
       supabase.from('typing_status')
         .delete()
         .eq('user_id', user.id)
@@ -349,6 +351,7 @@ export default function Chat() {
           exit={{ opacity: 0 }}
           className="px-4 py-1.5 text-sm text-[#A6C5D7] font-pjs"
         >
+          {console.log('Showing typing indicator for:', otherProfile?.name)}
           {otherProfile?.name} is typing
           <span className="inline-flex ml-1">
             <span className="animate-bounce mx-0.5" style={{ animationDelay: '0ms' }}>•</span>
