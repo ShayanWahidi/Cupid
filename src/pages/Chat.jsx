@@ -270,7 +270,7 @@ export default function Chat() {
           <ArrowLeftIcon className="w-5 h-5 text-[#D6E6F3]" />
         </button>
 
-        <img src={logo} alt="Cupid" className="h-8 w-8 rounded-full drop-shadow-lg shrink-0" />
+        <img src={logo} alt="Cupid" className="h-12 w-12 rounded-full drop-shadow-lg shrink-0" />
 
         <button
           onClick={() => setShowProfile(true)}

@@ -85,8 +85,8 @@ export default function Header() {
   return (
     <>
       <div className="flex items-center justify-between h-14 px-6 shrink-0 bg-[#000926]/80 backdrop-blur-md">
-        <div className="flex items-center gap-2">
-          <img src={logo} alt="Cupid" className="h-8 w-8 rounded-full drop-shadow-lg" />
+        <div className="flex items-center gap-3">
+          <img src={logo} alt="Cupid" className="h-12 w-12 rounded-full drop-shadow-lg" />
           <h1 className="font-sora font-bold text-[#F0F4FF] text-xl">Cupid</h1>
         </div>
 
