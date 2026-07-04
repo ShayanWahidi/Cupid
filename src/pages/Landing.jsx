@@ -55,10 +55,10 @@ export default function Landing() {
                 onClick={() => navigate('/login')}
                 className="w-full bg-gradient-to-r from-[#0F52BA] to-[#A6C5D7] text-white rounded-2xl py-4 font-pjs font-semibold text-lg"
               >
-                Yes
+                {current < 2 ? "Yes" : "Okay, Let's go"}
               </motion.button>
               
-              {current < 2 ? (
+              {current < 2 && (
                 <motion.button
                   whileHover={{ scale: 1.03 }}
                   whileTap={{ scale: 0.97 }}
@@ -66,15 +66,6 @@ export default function Landing() {
                   className="w-full bg-gradient-to-r from-[#0F52BA] to-[#A6C5D7] text-white rounded-2xl py-4 font-pjs font-semibold text-lg"
                 >
                   {current === 0 ? "Not really" : "Maybe"}
-                </motion.button>
-              ) : (
-                <motion.button
-                  whileHover={{ scale: 1.03 }}
-                  whileTap={{ scale: 0.97 }}
-                  onClick={() => navigate('/login')}
-                  className="w-full bg-gradient-to-r from-[#0F52BA] to-[#A6C5D7] text-white rounded-2xl py-4 font-pjs font-semibold text-lg"
-                >
-                  Okay, Let's go
                 </motion.button>
               )}
             </div>
