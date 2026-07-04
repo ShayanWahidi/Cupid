@@ -20,12 +20,14 @@ export default function Chat() {
   const bottomRef = useRef(null)
   const inputRef = useRef(null)
   const typingTimeoutRef = useRef(null)
+  const typingAutoHideRef = useRef(null)
 
   useEffect(() => {
     if (!user || !matchId) return
     initChat()
     return () => {
       if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current)
+      if (typingAutoHideRef.current) clearTimeout(typingAutoHideRef.current)
       supabase.removeAllChannels()
     }
   }, [user, matchId])
@@ -117,6 +119,11 @@ export default function Chat() {
           console.log('Typing insert received:', payload)
           if (payload.new.user_id !== user.id) {
             setOtherTyping(true)
+            if (typingAutoHideRef.current) clearTimeout(typingAutoHideRef.current)
+            typingAutoHideRef.current = setTimeout(() => {
+              setOtherTyping(false)
+              typingAutoHideRef.current = null
+            }, 5000)
           }
         }
       )
@@ -130,6 +137,7 @@ export default function Chat() {
         },
         (payload) => {
           console.log('Typing delete received:', payload)
+          if (typingAutoHideRef.current) clearTimeout(typingAutoHideRef.current)
           setOtherTyping(false)
         }
       )
@@ -346,18 +354,29 @@ export default function Chat() {
 
       {otherTyping && (
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0 }}
-          className="px-4 py-1.5 text-sm text-[#A6C5D7] font-pjs"
+          className="flex justify-start px-4 pb-2"
         >
           {console.log('Showing typing indicator for:', otherProfile?.name)}
-          {otherProfile?.name} is typing
-          <span className="inline-flex ml-1">
-            <span className="animate-bounce mx-0.5" style={{ animationDelay: '0ms' }}>•</span>
-            <span className="animate-bounce mx-0.5" style={{ animationDelay: '150ms' }}>•</span>
-            <span className="animate-bounce mx-0.5" style={{ animationDelay: '300ms' }}>•</span>
-          </span>
+          <div className="bg-white/10 rounded-2xl rounded-bl-sm border border-white/10 px-5 py-3">
+            <span className="inline-flex gap-1.5">
+              {[0, 1, 2].map((i) => (
+                <motion.span
+                  key={i}
+                  className="w-2 h-2 bg-[#A6C5D7] rounded-full inline-block"
+                  animate={{ opacity: [0.3, 1, 0.3] }}
+                  transition={{
+                    duration: 1.2,
+                    repeat: Infinity,
+                    delay: i * 0.2,
+                    ease: 'easeInOut',
+                  }}
+                />
+              ))}
+            </span>
+          </div>
         </motion.div>
       )}
 
