@@ -2,7 +2,7 @@ import React from 'react'
 import { useState, useRef, useMemo, useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion } from 'motion/react'
-import { XMarkIcon, EllipsisVerticalIcon, FlagIcon, NoSymbolIcon, MagnifyingGlassIcon, ArrowUturnLeftIcon } from '@heroicons/react/24/outline'
+import { XMarkIcon, EllipsisVerticalIcon, FlagIcon, NoSymbolIcon, MagnifyingGlassIcon, ArrowUturnLeftIcon, ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline'
 import { HeartIcon as HeartSolid } from '@heroicons/react/24/solid'
 import TinderCard from 'react-tinder-card'
 import { supabase } from '../lib/supabase'
@@ -21,6 +21,7 @@ export default function Swipe() {
   const [matchedUser, setMatchedUser] = useState(null)
   const [menuOpen, setMenuOpen] = useState(null)
   const [lastSwiped, setLastSwiped] = useState(null)
+  const [photoIndex, setPhotoIndex] = useState(0)
   const swipingRef = useRef(false)
   const profilesRef = useRef(profiles)
 
@@ -76,6 +77,17 @@ export default function Swipe() {
     }
 
     setLoading(false)
+  }
+
+  const navigatePhoto = (dir) => {
+    const topProfile = profiles[profiles.length - 1]
+    if (!topProfile?.photos || topProfile.photos.length <= 1) return
+    const maxIdx = topProfile.photos.length - 1
+    setPhotoIndex((prev) =>
+      dir === 'next'
+        ? prev >= maxIdx ? 0 : prev + 1
+        : prev <= 0 ? maxIdx : prev - 1
+    )
   }
 
   const checkMutualLike = async (swipedId) => {
@@ -148,6 +160,7 @@ export default function Swipe() {
     }
 
     setLastSwiped(profile)
+    setPhotoIndex(0)
 
     setProfiles((prev) => prev.filter((_, i) => i !== index))
     swipingRef.current = false
@@ -249,17 +262,48 @@ export default function Swipe() {
                       swipeThreshold={120}
                       className="absolute inset-0"
                     >
-                      <div className="w-full h-full rounded-3xl overflow-hidden shadow-2xl relative">
-                        {profile.photos?.[0] ? (
+                      <div className="w-full h-full rounded-3xl overflow-hidden shadow-2xl relative select-none">
+                        {profile.photos?.length > 0 ? (
                           <img
-                            src={profile.photos[0]}
+                            src={profile.photos[photoIndex]}
                             alt=""
-                            className="w-full h-full object-cover"
+                            className="w-full h-full object-cover pointer-events-none"
                           />
                         ) : (
                           <div className="w-full h-full bg-white/10 flex items-center justify-center text-[#A6C5D7]/50">
                             No photo
                           </div>
+                        )}
+
+                        {isTop && profile.photos?.length > 1 && (
+                          <>
+                            <button
+                              onClick={(e) => { e.stopPropagation(); navigatePhoto('prev') }}
+                              className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/30 flex items-center justify-center text-white/70 hover:text-white hover:bg-black/50 transition opacity-70 hover:opacity-100"
+                            >
+                              <ChevronLeftIcon className="w-5 h-5" />
+                            </button>
+                            <button
+                              onClick={(e) => { e.stopPropagation(); navigatePhoto('next') }}
+                              className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/30 flex items-center justify-center text-white/70 hover:text-white hover:bg-black/50 transition opacity-70 hover:opacity-100"
+                            >
+                              <ChevronRightIcon className="w-5 h-5" />
+                            </button>
+                            <div className="absolute top-3 left-3 bg-black/40 text-white text-xs font-pjs font-medium px-2 py-0.5 rounded-full">
+                              {photoIndex + 1}/{profile.photos.length}
+                            </div>
+                            <div className="absolute bottom-28 left-1/2 -translate-x-1/2 flex gap-1.5">
+                              {profile.photos.map((_, dotIdx) => (
+                                <button
+                                  key={dotIdx}
+                                  onClick={(e) => { e.stopPropagation(); setPhotoIndex(dotIdx) }}
+                                  className={`w-2 h-2 rounded-full transition ${
+                                    dotIdx === photoIndex ? 'bg-[#A6C5D7]' : 'bg-[#A6C5D7]/40'
+                                  }`}
+                                />
+                              ))}
+                            </div>
+                          </>
                         )}
 
                         <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-[#000926] to-transparent px-5 pt-14 pb-5">
