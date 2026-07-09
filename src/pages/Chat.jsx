@@ -5,12 +5,14 @@ import { ArrowLeftIcon, PaperAirplaneIcon, EllipsisVerticalIcon, FlagIcon, NoSym
 import logo from '../assets/logo.png'
 import { supabase } from '../lib/supabase'
 import { useAuth } from '../hooks/useAuth'
+import { useUnreadMessages } from '../hooks/useUnreadMessages'
 import UserProfileModal from '../components/UserProfileModal'
 
 export default function Chat() {
   const { matchId } = useParams()
   const { user } = useAuth()
   const navigate = useNavigate()
+  const { markAsRead } = useUnreadMessages(user)
   const [messages, setMessages] = useState([])
   const [otherProfile, setOtherProfile] = useState(null)
   const [input, setInput] = useState('')
@@ -23,6 +25,7 @@ export default function Chat() {
   const inputRef = useRef(null)
   const typingTimeoutRef = useRef(null)
   const typingAutoHideRef = useRef(null)
+  const markedReadRef = useRef(false)
 
   useEffect(() => {
     if (!user || !matchId) return
@@ -33,6 +36,13 @@ export default function Chat() {
       supabase.removeAllChannels()
     }
   }, [user, matchId])
+
+  useEffect(() => {
+    if (matchId && !markedReadRef.current) {
+      markAsRead(matchId)
+      markedReadRef.current = true
+    }
+  }, [matchId, markAsRead])
 
   const initChat = async () => {
     setLoading(true)
