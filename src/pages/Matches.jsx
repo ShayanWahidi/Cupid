@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom'
 import { motion } from 'motion/react'
 import { supabase } from '../lib/supabase'
 import { useAuth } from '../hooks/useAuth'
-import { useUnreadMessages } from '../hooks/useUnreadMessages'
 import Header from '../components/Header'
 
 export default function Matches() {
@@ -11,7 +10,6 @@ export default function Matches() {
   const navigate = useNavigate()
   const [matches, setMatches] = useState([])
   const [loading, setLoading] = useState(true)
-  const { unreadByMatch } = useUnreadMessages(user)
 
   useEffect(() => {
     if (!user) return
@@ -113,21 +111,16 @@ export default function Matches() {
                 onClick={() => navigate(`/chat/${matchId}`)}
                 className="flex items-center gap-4 p-3 rounded-2xl bg-white/5 border border-white/10 transition text-left"
               >
-                <div className="relative shrink-0">
-                  {profile?.photos?.[0] ? (
-                    <img
-                      src={profile.photos[0]}
-                      alt=""
-                      className="w-14 h-14 rounded-full object-cover ring-2 ring-[#A6C5D7]"
-                    />
-                  ) : (
-                    <div className="w-14 h-14 rounded-full bg-white/10 ring-2 ring-[#A6C5D7]/30" />
-                  )}
-                  {unreadByMatch[matchId] > 0 && (
-                    <span className="absolute -top-0.5 -right-0.5 w-3.5 h-3.5 bg-red-500 rounded-full border-2 border-[#000926]" />
-                  )}
-                </div>
-                <div className="min-w-0 flex-1">
+                {profile?.photos?.[0] ? (
+                  <img
+                    src={profile.photos[0]}
+                    alt=""
+                    className="w-14 h-14 rounded-full object-cover shrink-0 ring-2 ring-[#A6C5D7]"
+                  />
+                ) : (
+                  <div className="w-14 h-14 rounded-full bg-white/10 shrink-0 ring-2 ring-[#A6C5D7]/30" />
+                )}
+                <div className="min-w-0">
                   <p className="font-sora font-bold text-[#F0F4FF] truncate">
                     {profile?.name || 'Unknown'}
                   </p>
@@ -137,11 +130,6 @@ export default function Matches() {
                     </p>
                   )}
                 </div>
-                {unreadByMatch[matchId] > 0 && (
-                  <span className="bg-red-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full shrink-0">
-                    {unreadByMatch[matchId] > 99 ? '99+' : unreadByMatch[matchId]}
-                  </span>
-                )}
               </motion.button>
             ))}
           </div>
