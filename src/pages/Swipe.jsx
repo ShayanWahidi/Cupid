@@ -9,6 +9,7 @@ import { supabase } from '../lib/supabase'
 import { useAuth } from '../hooks/useAuth'
 import { useMatchContext } from '../context/MatchContext'
 import Header from '../components/Header'
+import ToCAgreementModal from '../components/ToCAgreementModal'
 
 export default function Swipe() {
   const { user } = useAuth()
@@ -22,6 +23,7 @@ export default function Swipe() {
   const [menuOpen, setMenuOpen] = useState(null)
   const [lastSwiped, setLastSwiped] = useState(null)
   const [photoIndex, setPhotoIndex] = useState(0)
+  const [showToC, setShowToC] = useState(false)
   const swipingRef = useRef(false)
   const profilesRef = useRef(profiles)
 
@@ -33,6 +35,14 @@ export default function Swipe() {
     () => Array(profiles.length).fill(0).map(() => React.createRef()),
     [profiles.length]
   )
+
+  useEffect(() => {
+    if (!user) return
+    supabase.from('toc_acceptance').select('id').eq('user_id', user.id).maybeSingle()
+      .then(({ data }) => {
+        if (!data) setShowToC(true)
+      })
+  }, [user])
 
   useEffect(() => {
     if (!user) return
@@ -396,6 +406,13 @@ export default function Swipe() {
             </motion.button>
           </div>
         </>
+      )}
+
+      {showToC && user && (
+        <ToCAgreementModal
+          user={user}
+          onAccept={() => setShowToC(false)}
+        />
       )}
     </div>
   )
