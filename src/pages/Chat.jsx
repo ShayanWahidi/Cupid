@@ -110,7 +110,7 @@ export default function Chat() {
           filter: `match_id=eq.${matchId}`,
         },
         (payload) => {
-          console.log('Message deleted:', payload)
+          console.log('Message DELETE received real-time:', payload)
           setMessages((prev) => prev.filter((m) => m.id !== payload.old.id))
         }
       )
