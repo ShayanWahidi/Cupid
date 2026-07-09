@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { motion } from 'motion/react'
-import { ArrowLeftIcon, PaperAirplaneIcon, EllipsisVerticalIcon, FlagIcon, NoSymbolIcon } from '@heroicons/react/24/outline'
+import { motion, AnimatePresence } from 'motion/react'
+import { ArrowLeftIcon, PaperAirplaneIcon, EllipsisVerticalIcon, FlagIcon, NoSymbolIcon, TrashIcon } from '@heroicons/react/24/outline'
 import logo from '../assets/logo.png'
 import { supabase } from '../lib/supabase'
 import { useAuth } from '../hooks/useAuth'
@@ -21,6 +21,7 @@ export default function Chat() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [showProfile, setShowProfile] = useState(false)
   const [otherTyping, setOtherTyping] = useState(false)
+  const [deletingId, setDeletingId] = useState(null)
   const bottomRef = useRef(null)
   const inputRef = useRef(null)
   const typingTimeoutRef = useRef(null)
@@ -252,6 +253,23 @@ export default function Chat() {
     setMenuOpen(false)
   }
 
+  const handleDeleteMessage = async (msgId) => {
+    setDeletingId(msgId)
+    setMessages((prev) => prev.filter((m) => m.id !== msgId))
+
+    const { error } = await supabase
+      .from('messages')
+      .delete()
+      .eq('id', msgId)
+      .eq('sender_id', user.id)
+
+    if (error) {
+      console.error('Delete message error:', error)
+    }
+
+    setDeletingId(null)
+  }
+
   const handleBlock = async () => {
     if (!otherProfile) return
     await supabase.from('blocks').insert({
@@ -341,16 +359,27 @@ export default function Chat() {
       </div>
 
       <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3">
-        {messages.map((msg) => {
+        <AnimatePresence initial={false}>
+          {messages.map((msg) => {
           const isMe = msg.sender_id === user.id
           return (
             <motion.div
               key={msg.id}
               initial={{ opacity: 0, x: isMe ? 20 : -20 }}
               animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, scale: 0.95 }}
               transition={{ duration: 0.2 }}
-              className={`flex ${isMe ? 'justify-end' : 'justify-start'}`}
+              className={`flex items-end gap-1.5 group ${isMe ? 'justify-end' : 'justify-start'}`}
             >
+              {isMe && (
+                <button
+                  onClick={() => handleDeleteMessage(msg.id)}
+                  disabled={deletingId === msg.id}
+                  className="opacity-0 group-hover:opacity-100 transition-opacity p-1 text-[#A6C5D7]/50 hover:text-red-400"
+                >
+                  <TrashIcon className="w-4 h-4" />
+                </button>
+              )}
               <div
                 className={`max-w-[80%] rounded-2xl px-4 py-2.5 text-sm font-pjs leading-relaxed ${
                   isMe
@@ -363,6 +392,7 @@ export default function Chat() {
             </motion.div>
           )
         })}
+        </AnimatePresence>
         <div ref={bottomRef} />
       </div>
 
