@@ -254,7 +254,7 @@ export default function Profile() {
         <div className="px-6 py-4 border-t border-white/10">
           <button
             onClick={handleLogout}
-            className="w-full text-center text-sm text-[#A6C5D7]/60 active:text-[#A6C5D7] transition py-2"
+            className="w-full text-center text-sm text-red-400 hover:text-red-500 transition py-2"
           >
             Sign out
           </button>
