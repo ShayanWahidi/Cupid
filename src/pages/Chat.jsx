@@ -22,6 +22,7 @@ export default function Chat() {
   const [showProfile, setShowProfile] = useState(false)
   const [otherTyping, setOtherTyping] = useState(false)
   const [deletingId, setDeletingId] = useState(null)
+  const [selectedMessageId, setSelectedMessageId] = useState(null)
   const bottomRef = useRef(null)
   const inputRef = useRef(null)
   const typingTimeoutRef = useRef(null)
@@ -358,10 +359,14 @@ export default function Chat() {
         </div>
       </div>
 
-      <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3">
+      <div
+        className="flex-1 overflow-y-auto px-4 py-4 space-y-3"
+        onClick={() => setSelectedMessageId(null)}
+      >
         <AnimatePresence initial={false}>
           {messages.map((msg) => {
           const isMe = msg.sender_id === user.id
+          const showDelete = isMe && (selectedMessageId === msg.id)
           return (
             <motion.div
               key={msg.id}
@@ -369,13 +374,25 @@ export default function Chat() {
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, scale: 0.95 }}
               transition={{ duration: 0.2 }}
+              onClick={(e) => {
+                e.stopPropagation()
+                setSelectedMessageId(selectedMessageId === msg.id ? null : msg.id)
+              }}
               className={`flex items-end gap-1.5 group ${isMe ? 'justify-end' : 'justify-start'}`}
             >
               {isMe && (
                 <button
-                  onClick={() => handleDeleteMessage(msg.id)}
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    handleDeleteMessage(msg.id)
+                    setSelectedMessageId(null)
+                  }}
                   disabled={deletingId === msg.id}
-                  className="opacity-0 group-hover:opacity-100 transition-opacity p-1 text-[#A6C5D7]/50 hover:text-red-400"
+                  className={`transition-opacity p-1 ${
+                    showDelete ? 'text-red-400' : 'text-[#A6C5D7]/50'
+                  } hover:text-red-400 ${
+                    showDelete ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
+                  }`}
                 >
                   <TrashIcon className="w-4 h-4" />
                 </button>
